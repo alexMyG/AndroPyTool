@@ -1,0 +1,1 @@
+python launchFlowDroidMod.py -m ordered -o ascending -t 10 -r /home/alejandro/BBDD/fdroid/ -f /home/alejandro/FlowDroid/resultsFlowDroidFdroid
