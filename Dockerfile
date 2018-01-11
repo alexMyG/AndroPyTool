@@ -22,6 +22,7 @@ RUN apt-get update \
  && apt-get update \
  && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
  && apt-get install -y oracle-java8-installer \
+ && apt-get install -y python-setuptools \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -41,20 +42,27 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	PATH=$PATH:/root/android-sdk-linux/platform-tools:/root/android-sdk-linux/tools \
 	ANDROID_EMULATOR_FORCE_32BIT=true
 
-# Preparing droidbox
+
 RUN pwd \
  && cd /root \
- && git clone https://github.com/alexMyG/DroidBox-AndroPyTool \
- # && wget -P /root/DroidBox-AndroPyTool/images https://github.com/alexMyG/DroidBox-AndroPyTool/raw/master/images/system.img \
- # && wget -P /root/DroidBox-AndroPyTool/images https://github.com/alexMyG/DroidBox-AndroPyTool/raw/master/images/ramdisk.img \
- && echo "no" | DroidBox-AndroPyTool/createDroidBoxDevice.sh \
- && chmod 744 DroidBox-AndroPyTool/*.sh \
- && pip install -U setuptools wheel \
- && pip install -r DroidBox-AndroPyTool/requirements.txt
+ && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
+ && wget https://github.com/pjlantz/droidbox/releases/download/v4.1.1/DroidBox411RC.tar.gz \
+ && tar -zxvf DroidBox411RC.tar.gz \ 
+ && cp -r DroidBox_4.1.1/images AndroPyTool/DroidBox_AndroPyTool/images \
+ && pip install wheel \
+ && pip install -r AndroPyTool/requirements.txt
+
+
+# Preparing droidbox
+RUN pwd \
+ && cd /root/ \
+ && chmod 744 AndroPyTool/DroidBox_AndroPyTool/*.sh \
+ && echo "no" | ./AndroPyTool/DroidBox_AndroPyTool/createDroidBoxDevice.sh \
 
 VOLUME /apks
 
 EXPOSE 5554 5555
 
-CMD /root/DroidBox-AndroPyTool/run.sh
-# CMD bash -c "python /root/DroidBox-AndroPyTool/fork_droidbox.py /apks 300 False"
+# CMD /root/DroidBox-AndroPyTool/run.sh
+CMD cd /root/AndroPyTool/ \
+ && python androPyTool.py -all --mongodbURI beard.ii.uam.es:27017 -s /apks

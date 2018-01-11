@@ -1,6 +1,7 @@
 androguard==3.0.1
 backports.functools-lru-cache==1.4
 better-exceptions==0.1.8
+bson==0.5.0
 certifi==2017.11.5
 chardet==3.0.4
 cycler==0.10.0
@@ -8,6 +9,8 @@ idna==2.6
 lxml==4.1.1
 matplotlib==2.1.1
 numpy==1.13.3
+pandas==0.22.0
+pymongo==3.6.0
 pyparsing==2.2.0
 python-dateutil==2.6.1
 pytz==2017.3
