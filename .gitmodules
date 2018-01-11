@@ -1,0 +1,6 @@
+[submodule "DroidBox_AndroPyTool"]
+	path = DroidBox_AndroPyTool
+	url = https://github.com/alexMyG/DroidBox_AndroPyTool.git
+[submodule "avclass"]
+	path = avclass
+	url = https://github.com/malicialab/avclass.git
