@@ -44,7 +44,7 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 
 
 RUN pwd \
- && cd /root \
+ && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
  && wget https://github.com/pjlantz/droidbox/releases/download/v4.1.1/DroidBox411RC.tar.gz \
  && tar -zxvf DroidBox411RC.tar.gz \ 
@@ -65,4 +65,4 @@ EXPOSE 5554 5555
 
 # CMD /root/DroidBox-AndroPyTool/run.sh
 CMD cd /root/AndroPyTool/ \
- && python androPyTool.py -all --mongodbURI beard.ii.uam.es:27017 -s /apks
+ && python androPyTool.py -s /apks -all --mongodbURI beard.ii.uam.es:27017 

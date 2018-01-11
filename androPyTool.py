@@ -106,6 +106,9 @@ def main():
     parser.add_argument('-mg', '--mongodbURI', help='Exports the report generated to a mongodb database. Requires '
                                                     'connection address following the scheme: localhost:27017')
 
+    parser.add_argument('-csv', '--exportCSV', help='Exports the report generated to a CSV file. Only static '
+                                                    'features are included.')
+
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
@@ -142,12 +145,13 @@ def main():
                                 package_index=args.packageIndex,
                                 class_index=args.classIndex,
                                 system_commands_index=args.systemCommandsIndex,
-                                export_mongodb=args.mongodbURI)
+                                export_mongodb=args.mongodbURI,
+                                exportCSV=args.exportCSV)
 
 
 def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_virus_total, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_cleanup,
-                                package_index, class_index, system_commands_index, export_mongodb):
+                                package_index, class_index, system_commands_index, export_mongodb, exportCSV):
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
     It generates a folder tree containing all generated reports and features files
@@ -277,7 +281,8 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
                        system_commands_file=system_commands_index,
                        label=None,
                        avclass=True,
-                       export_mongodb=export_mongodb)
+                       export_mongodb=export_mongodb,
+                       export_csv=exportCSV)
 
 
 if __name__ == '__main__':

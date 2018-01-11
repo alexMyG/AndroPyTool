@@ -86,6 +86,9 @@ def main():
     parser.add_argument('-mg', '--mongodbURI', help='Exports the report generated to a mongodb database. Requires '
                                                     'connection address following the scheme: localhost:27017')
 
+    parser.add_argument('-csv', '--exportCSV', help='Exports the report generated to a CSV file. Only static '
+                                                    'features are included.')
+
     args = parser.parse_args()
 
     features_extractor(apks_directory=args.source, single_analysis=args.Single,
@@ -93,7 +96,7 @@ def main():
                        virus_total_reports_folder=args.VirusTotal, output_folder=args.output,
                        clean_up=args.cleanup, flowdroid_folder=args.FlowDroid, package_index_file=args.Package,
                        classes_index_file=args.Class, system_commands_file=args.SystemC, label=args.label,
-                       avclass=args.AVClass, export_mongodb=args.mongodbURI)
+                       avclass=args.AVClass, export_mongodb=args.mongodbURI, export_csv=args.exportCSV)
 
 
 ############################################################
