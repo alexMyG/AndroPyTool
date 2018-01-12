@@ -58,6 +58,8 @@ DROIDBOX_GUI_MODE = False
 
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
+os.chdir(CURRENT_DIRECTORY)
+
 
 def main():
 
