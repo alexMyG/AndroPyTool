@@ -40,7 +40,9 @@ RUN cd / \
 
 ENV ANDROID_HOME="/root/android-sdk-linux" \
 	PATH=$PATH:/root/android-sdk-linux/platform-tools:/root/android-sdk-linux/tools \
-	ANDROID_EMULATOR_FORCE_32BIT=true
+	ANDROID_EMULATOR_FORCE_32BIT=true \
+	TERM=linux \
+	TERMINFO=/etc/terminfo
 
 
 RUN pwd \
@@ -50,7 +52,8 @@ RUN pwd \
  && tar -zxvf DroidBox411RC.tar.gz \ 
  && cp -r DroidBox_4.1.1/images AndroPyTool/DroidBox_AndroPyTool/images \
  && pip install wheel \
- && pip install -r AndroPyTool/requirements.txt
+ && pip install -r AndroPyTool/requirements.txt \
+ && touch AndroPyTool/avclass/__init__.py
 
 
 # Preparing droidbox
@@ -65,4 +68,4 @@ EXPOSE 5554 5555
 
 # CMD /root/DroidBox-AndroPyTool/run.sh
 CMD cd /root/AndroPyTool/ \
- && python androPyTool.py -s /apks -all --mongodbURI beard.ii.uam.es:27017 
+ && python androPyTool.py -s /apks --color -all --mongodbURI beard.ii.uam.es:27017 

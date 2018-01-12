@@ -27,6 +27,13 @@ VT_KEY = load_file("info/vt_key")[0]
 VT_ANALYSIS_DIRECTORY_NAME = "/../VT_ANALYSIS/"
 
 
+def print_message(message, with_color, color):
+    if with_color:
+        print colored(message, color)
+    else:
+        print message
+
+
 def sha256(fname):
     """
     Method to calculate the SHA256 hash of a file
@@ -64,7 +71,7 @@ def get_report_hash(hash_num):
 
 def main():
     parser = argparse.ArgumentParser(
-        description=colored("Script designed for analysing apks with the VirusTotal service\n\n", "green") +
+        description="Script designed for analysing apks with the VirusTotal service\n\n" +
                     '[!] A VirusTotal API key must be provided in a file called vt_key inside '
                     'the info/directory',
         formatter_class=RawTextHelpFormatter)
@@ -79,10 +86,11 @@ def main():
         sys.exit(1)
     args = parser.parse_args()
 
-    analyse_virustotal(args.source, vt_analysis_output_folder=args.output, output_samples_folder=args.samplesoutput)
+    analyse_virustotal(args.source, vt_analysis_output_folder=args.output, output_samples_folder=args.samplesoutput,
+                       with_color=True)
 
 
-def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_samples_folder=None):
+def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_samples_folder=None, with_color=True):
     """
     Analyses a set of APK files with the VirusTotal service
 
@@ -94,7 +102,7 @@ def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_
     :return:
     """
     if len(VT_KEY) != 64:
-        print colored('ERROR!', 'red') + "invalid vt_key file. Please, provide a virustotal key!"
+        print 'ERROR! - invalid vt_key file. Please, provide a virustotal key!'
         sys.exit(0)
 
     if vt_analysis_output_folder is None:
@@ -120,7 +128,7 @@ def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_
     for apk in tqdm(apks_found):
 
         if isfile(join(source_directory, apk.replace(".apk", ".json"))):
-            print colored("APK WITH JSON. CONTINUE...", 'green')
+            print_message("APK WITH JSON. CONTINUE...", with_color, 'green')
             continue
         apk_path = source_directory + apk
         hash_sha = sha256(apk_path)
@@ -128,7 +136,7 @@ def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_
         while report == "":
             report = get_report_hash(hash_sha)
             if report == "":
-                print colored("No report received. Waiting...", 'red')
+                print_message("No report received. Waiting...", with_color, 'red')
                 time.sleep(1)
 
         response_dict = simplejson.loads(report)
@@ -157,23 +165,22 @@ def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_
                 response = requests.post('https://www.virustotal.com/vtapi/v2/file/scan', files=files, params=params)
 
             except requests.exceptions.ConnectionError:
-                print colored("Connection error", 'red')
+                print_message("Connection error", with_color, 'red')
                 continue
             print str(response)
             try:
                 response.json()
             except JSONDecodeError:
-                print colored("JSONDecodeError", 'red')
+                print_message("JSONDecodeError", with_color, 'red')
                 continue
-
-            print colored("SENT TO VIRUS-TOTAL", 'blue')
+            print_message("SENT TO VIRUS-TOTAL", with_color, 'blue')
 
     if reports_not_received > 0:
-        print colored("WARNING! ", 'red') + str(reports_not_received) + " apks does not have yet a VT analysis. Please" \
-                                                                        ", execute again this script after a while"
+        print "WARNING! " + str(reports_not_received) + " apks does not have yet a VT analysis. Please" \
+                                                         ", execute again this script after a while"
     else:
-        print colored("SUCCESS!!", 'green') + " All reports have been saved in the VT_ANALYSIS folder. APKS are in " \
-                                              "SAMPLES folder."
+        print_message("SUCCESS!!", with_color, 'green')
+        print " All reports have been saved in the VT_ANALYSIS folder. APKS are in SAMPLES folder."
 
 
 if __name__ == '__main__':

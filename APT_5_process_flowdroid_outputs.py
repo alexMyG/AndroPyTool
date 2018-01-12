@@ -12,13 +12,20 @@ from argparse import RawTextHelpFormatter
 PRM_DOMAINS = 'info/prmDomains.txt'
 
 
+def print_message(message, with_color, color):
+    if with_color:
+        print colored(message, color)
+    else:
+        print message
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description=colored("- Script designed for processing the outputs of Flowdroid\n"
-                            "- For each flowdroid log, a matrix counting all flows is obtained."
-                            "- For a set of flowdroid logs, a matrix counting all flows for"
-                            "  all apps is also obtained."
-                            "- Outputs are generated in CSV files. \n\n", "green"),
+        description="- Script designed for processing the outputs of Flowdroid\n"
+                    "- For each flowdroid log, a matrix counting all flows is obtained."
+                    "- For a set of flowdroid logs, a matrix counting all flows for"
+                    "  all apps is also obtained."
+                    "- Outputs are generated in CSV files. \n\n",
         formatter_class=RawTextHelpFormatter)
 
     parser.add_argument('-s', '--source', help='Source directory for FlowDroid logs', required=True)
@@ -125,7 +132,7 @@ def save_as_csv(path, dic, headers):
             writer.writerow(tmp_lis)
 
 
-def process_flowdroid_outputs(flowdroid_analyses_folder, output_folder_individual_csv, output_csv_file):
+def process_flowdroid_outputs(flowdroid_analyses_folder, output_folder_individual_csv, output_csv_file, with_color=True):
 
     if not os.path.exists(output_folder_individual_csv):
         os.makedirs(output_folder_individual_csv)
@@ -187,8 +194,8 @@ def process_flowdroid_outputs(flowdroid_analyses_folder, output_folder_individua
 
     combine_matrices(matrices, categories_list, output_csv_file)
 
-    print colored('Success!!', 'green')
-    print colored('Output folder: ' + str(output_folder_individual_csv), 'blue')
+    print_message('Success!!', with_color, 'green')
+    print_message('Output folder: ' + str(output_folder_individual_csv), with_color, 'blue')
 
 
 if __name__ == '__main__':

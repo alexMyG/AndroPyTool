@@ -109,6 +109,8 @@ def main():
     parser.add_argument('-csv', '--exportCSV', help='Exports the report generated to a CSV file. Only static '
                                                     'features are included.')
 
+    parser.add_argument('-co', '--color', help='Employs the termcolor library to print messages in a pretty format.')
+
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
@@ -146,12 +148,21 @@ def main():
                                 class_index=args.classIndex,
                                 system_commands_index=args.systemCommandsIndex,
                                 export_mongodb=args.mongodbURI,
-                                exportCSV=args.exportCSV)
+                                exportCSV=args.exportCSV,
+                                with_color=args.color)
+
+
+def print_message(message, with_color, color):
+    if with_color:
+        print colored(message, color)
+    else:
+        print message
 
 
 def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_virus_total, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_cleanup,
-                                package_index, class_index, system_commands_index, export_mongodb, exportCSV):
+                                package_index, class_index, system_commands_index, export_mongodb, exportCSV,
+                                with_color):
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
     It generates a folder tree containing all generated reports and features files
@@ -175,11 +186,13 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     ################################################
 
     if step_filter_apks:
-        print colored("\n\n>>>> AndroPyTool -- STEP 1: Filtering apks\n", "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 1: Filtering apks\n", "green", with_color, "green")
+        # print messagecolored("\n\n>>>> AndroPyTool -- STEP 1: Filtering apks\n", "green")
 
         filter_valid_apks(source_directory=source_folder,
                           valid_apks_directory=join_dir(source_folder, APKS_DIRECTORY),
-                          invalid_apks_directory=join_dir(source_folder, INVALID_APKS_DIRECTORY))
+                          invalid_apks_directory=join_dir(source_folder, INVALID_APKS_DIRECTORY),
+                          with_color=with_color)
 
         sleep(1)
 
@@ -196,11 +209,12 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 2 - Analyse with VirusTotal
     ################################################
     if step_analyse_virus_total:
-        print colored("\n\n>>>> AndroPyTool -- STEP 2: Analysing with VirusTotal\n", "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 2: Analysing with VirusTotal\n", "green", with_color, "green")
 
         analyse_virustotal(source_directory=join_dir(source_folder, APKS_DIRECTORY),
                            vt_analysis_output_folder=join_dir(source_folder, VIRUSTOTAL_FOLDER),
-                           output_samples_folder=join_dir(source_folder, APKS_DIRECTORY))
+                           output_samples_folder=join_dir(source_folder, APKS_DIRECTORY),
+                           with_color=with_color)
 
         sleep(1)
 
@@ -208,7 +222,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 3 - Filtering BW & MW
     ################################################
     if step_filter_bw_mw:
-        print colored("\n\n>>>> AndroPyTool -- STEP 3: Filtering BW and MW\n", "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 3: Filtering BW and MW\n", "green", with_color, "green")
 
         filter_apks(source_directory=join_dir(source_folder, APKS_DIRECTORY),
                     vt_analysis_directory=join_dir(source_folder, VIRUSTOTAL_FOLDER),
@@ -224,10 +238,11 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 4 - Launch FlowDroid
     ################################################
     if step_run_flowdroid:
-        print colored("\n\n>>>> AndroPyTool -- STEP 4: Launching FlowDroid\n", "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 4: Launching FlowDroid\n", "green", with_color, "green")
 
         run_flowdroid(source_directory=join_dir(source_folder, APKS_DIRECTORY),
-                      output_folder=join_dir(source_folder, FLOWDROID_RESULTS_FOLDER))
+                      output_folder=join_dir(source_folder, FLOWDROID_RESULTS_FOLDER),
+                      with_color=with_color)
 
         sleep(1)
 
@@ -235,12 +250,13 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 5 - Process FlowDroid outputs
     ################################################
     if step_run_flowdroid:
-        print colored("\n\n>>>> AndroPyTool -- STEP 5: Processing FlowDroid outputs\n", "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 5: Processing FlowDroid outputs\n", "green", with_color, "green")
 
         process_flowdroid_outputs(flowdroid_analyses_folder=join_dir(source_folder, FLOWDROID_RESULTS_FOLDER),
                                   output_folder_individual_csv=join_dir(source_folder, FLOWDROID_PROCESSED_FOLDER),
                                   output_csv_file=join_dir(source_folder, FLOWDROID_PROCESSED_FOLDER,
-                                                           OUTPUT_GLOBAL_FILE_FLOWDROID))
+                                                           OUTPUT_GLOBAL_FILE_FLOWDROID),
+                                  with_color=with_color)
 
         sleep(1)
 
@@ -248,7 +264,8 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 6 - Execute DroidBox
     ################################################
     if step_run_droidbox:
-        print colored("\n\n>>>> AndroPyTool -- STEP 6: Execute DroidBox\n", "green")
+
+        print_message("\n\n>>>> AndroPyTool -- STEP 6: Execute DroidBox\n", with_color, "green")
 
         analyze_with_droidbox(apks_folders=join_dir(source_folder, APKS_DIRECTORY),
                               duration=DROIDBOX_ANALYSIS_DURATION,
@@ -267,7 +284,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     ################################################
     # STEP 7 - Features extraction
     ################################################
-    print colored("\n\n>>>> AndroPyTool -- STEP 7: Execute features extraction\n", "green")
+    print_message("\n\n>>>> AndroPyTool -- STEP 7: Execute features extraction\n", with_color, "green")
 
     features_extractor(apks_directory=join_dir(source_folder, APKS_DIRECTORY),
                        single_analysis=save_single_analysis,

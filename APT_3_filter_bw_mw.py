@@ -18,8 +18,7 @@ MW_DIRECTORY_NAME = "MW/"
 
 def main():
     parser = argparse.ArgumentParser(
-        description=colored("Script designed for filtering benign and malware APKs based on their VirusTotal analysis"
-                            "\n\n", "green"),
+        description="Script designed for filtering benign and malware APKs based on their VirusTotal analysis\n\n",
         formatter_class=RawTextHelpFormatter)
 
     parser.add_argument('-s', '--source', help='Source directory for APKs', required=True)
@@ -81,7 +80,7 @@ def filter_apks(source_directory, vt_analysis_directory, bw_directory_name=None,
         apk_path = join_dir(source_directory, apk)
 
         if not os.path.isfile(json_id):
-            print colored('ERROR! ', 'red') + "NO VT ANALYSIS FOUND FOR APK: " + app_id
+            print 'ERROR! - NO VT ANALYSIS FOUND FOR APK: ' + app_id
             continue
 
         data_file = open(json_id)

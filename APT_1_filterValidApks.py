@@ -16,12 +16,19 @@ VALID_APKS_DIRECTORY = "samples/"
 INVALID_APKS_DIRECTORY = "invalid_apks/"
 
 
+def print_message(message, with_color, color):
+    if with_color:
+        print colored(message, color)
+    else:
+        print message
+
+
 def main():
 
     parser = argparse.ArgumentParser(
-        description=colored("Script designed for filtering invalid apks\n\n", "green") +
-                            "[!] Each apk in the source directory is checked "
-                            "with AndroGuard in order to check if the apk is valid or not. ",
+        description="Script designed for filtering invalid apks\n\n" +
+                    "[!] Each apk in the source directory is checked "
+                    "with AndroGuard in order to check if the apk is valid or not. ",
         formatter_class=RawTextHelpFormatter)
 
     parser.add_argument('-s', '--source', help='Source directory for APKs', required=True)
@@ -38,14 +45,14 @@ def main():
     # CHECKING ARGUMENTS:
     files_apks = [f for f in listdir(args.source) if isfile(join(args.source, f)) and f.endswith(".apk")]
     if len(files_apks) == 0:
-        print colored("ERROR! - ", "red") + "Folder without apk files! The source directory must contain a number of " \
-                                            "apk files."
+        print "ERROR! - Folder without apk files! The source directory must contain a number of apk files."
         sys.exit(0)
 
-    filter_valid_apks(args.source, valid_apks_directory=args.output, invalid_apks_directory=args.invalid)
+    filter_valid_apks(args.source, valid_apks_directory=args.output, invalid_apks_directory=args.invalid,
+                      with_color=True)
 
 
-def filter_valid_apks(source_directory, valid_apks_directory=None, invalid_apks_directory=None):
+def filter_valid_apks(source_directory, valid_apks_directory=None, invalid_apks_directory=None, with_color=True):
     """
     Analyses a set of Android apks with Androguard to filter valid and invalid samples
     If a JSON file with the same name that the app is found in the source directory, it is also moved
@@ -55,6 +62,7 @@ def filter_valid_apks(source_directory, valid_apks_directory=None, invalid_apks_
     :param source_directory: Folder containing apk files
     :param valid_apks_directory: Folder where valid apks are saved
     :param invalid_apks_directory: Folder where invalid apks are saved
+    :param with_color: If colors are used to print messages
     """
     if not isdir(source_directory):
         print "Folder not found!"
@@ -106,7 +114,8 @@ def filter_valid_apks(source_directory, valid_apks_directory=None, invalid_apks_
             shutil.move(join_dir(source_directory, apk), join_dir(invalid_apks_directory, apk))
             num_invalid_apk += 1
 
-    print colored("TOTAL VALID APKS: " + str(num_valid_apk), "green")
+
+    print_message("TOTAL VALID APKS: " + str(num_valid_apk), with_color, "green")
     print colored("TOTAL INVALID APKS: " + str(num_invalid_apk), "red")
 
 
