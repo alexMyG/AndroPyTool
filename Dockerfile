@@ -46,9 +46,9 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 
 
 RUN pwd \
- && cd / \
  && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
+ && cd /root/ \
  && wget https://github.com/pjlantz/droidbox/releases/download/v4.1.1/DroidBox411RC.tar.gz \
  && tar -zxvf DroidBox411RC.tar.gz \ 
  && cp -r DroidBox_4.1.1/images AndroPyTool/DroidBox_AndroPyTool/images \

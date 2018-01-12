@@ -1,0 +1,1 @@
+python androPyTool.py -all -s ~/ANDROID_DATASET_TEST/ --mongodbURI beard.ii.uam.es:27017
