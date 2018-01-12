@@ -112,7 +112,7 @@ def main():
                                                     'features are included.')
 
     parser.add_argument('-co', '--color', help='Employs the termcolor library to print messages in a pretty format.',
-                        action='store_true')
+                        action='store_true', default=False)
 
     if len(sys.argv) == 1:
         parser.print_help()
