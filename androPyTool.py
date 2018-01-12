@@ -187,7 +187,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     ################################################
 
     if step_filter_apks:
-        print_message("\n\n>>>> AndroPyTool -- STEP 1: Filtering apks\n", "green", with_color, "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 1: Filtering apks\n", with_color, "green")
         # print messagecolored("\n\n>>>> AndroPyTool -- STEP 1: Filtering apks\n", "green")
 
         filter_valid_apks(source_directory=source_folder,
@@ -210,7 +210,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 2 - Analyse with VirusTotal
     ################################################
     if step_analyse_virus_total:
-        print_message("\n\n>>>> AndroPyTool -- STEP 2: Analysing with VirusTotal\n", "green", with_color, "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 2: Analysing with VirusTotal\n", with_color, "green")
 
         analyse_virustotal(source_directory=join_dir(source_folder, APKS_DIRECTORY),
                            vt_analysis_output_folder=join_dir(source_folder, VIRUSTOTAL_FOLDER),
@@ -223,7 +223,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 3 - Filtering BW & MW
     ################################################
     if step_filter_bw_mw:
-        print_message("\n\n>>>> AndroPyTool -- STEP 3: Filtering BW and MW\n", "green", with_color, "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 3: Filtering BW and MW\n", with_color, "green")
 
         filter_apks(source_directory=join_dir(source_folder, APKS_DIRECTORY),
                     vt_analysis_directory=join_dir(source_folder, VIRUSTOTAL_FOLDER),
@@ -239,7 +239,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 4 - Launch FlowDroid
     ################################################
     if step_run_flowdroid:
-        print_message("\n\n>>>> AndroPyTool -- STEP 4: Launching FlowDroid\n", "green", with_color, "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 4: Launching FlowDroid\n", with_color, "green")
 
         run_flowdroid(source_directory=join_dir(source_folder, APKS_DIRECTORY),
                       output_folder=join_dir(source_folder, FLOWDROID_RESULTS_FOLDER),
@@ -251,7 +251,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     # STEP 5 - Process FlowDroid outputs
     ################################################
     if step_run_flowdroid:
-        print_message("\n\n>>>> AndroPyTool -- STEP 5: Processing FlowDroid outputs\n", "green", with_color, "green")
+        print_message("\n\n>>>> AndroPyTool -- STEP 5: Processing FlowDroid outputs\n", with_color, "green")
 
         process_flowdroid_outputs(flowdroid_analyses_folder=join_dir(source_folder, FLOWDROID_RESULTS_FOLDER),
                                   output_folder_individual_csv=join_dir(source_folder, FLOWDROID_PROCESSED_FOLDER),
