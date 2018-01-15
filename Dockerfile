@@ -74,9 +74,6 @@ VOLUME /apks
 
 EXPOSE 5554 5555
 
-# CMD /root/DroidBox-AndroPyTool/run.sh
-# CMD cd /root/AndroPyTool/ \
-# && python androPyTool.py -s /apks --all --mongodbURI 
 CMD cd /root/AndroPyTool/ \
  && chmod 744 run_androPyTool.sh \
  && ./run_androPyTool.sh
