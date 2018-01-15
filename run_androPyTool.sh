@@ -1,1 +1,1 @@
-python -u androPyTool.py -all --no-color -s /apks --mongodbURI beard.ii.uam.es:27017
+python -u androPyTool.py -all --no-color -s /apks
