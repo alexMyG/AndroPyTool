@@ -44,15 +44,11 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERM=linux \
 	TERMINFO=/etc/terminfo
 
-RUN pwd
+RUN cd /root/ \
+ && pwd 
 
-RUN pwd
-
-RUN pwd
-
-RUN pwd
-
-RUN pwd
+RUN cd /root/ \
+ && pwd 
 
 RUN pwd \
  && cd /root/ \
