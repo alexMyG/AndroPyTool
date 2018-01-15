@@ -90,7 +90,7 @@ def run_flowdroid(source_directory, output_folder, with_color=True):
 
     for apk_path in tqdm(list_apks):
 
-        apk_id = apk_path.split("/")[-1]
+        apk_id = os.path.basename(apk_path)
 
         if os.path.isfile(join_dir(output_folder, apk_id.replace(".apk", ".json"))):
             continue
