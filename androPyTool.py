@@ -111,8 +111,9 @@ def main():
     parser.add_argument('-csv', '--exportCSV', help='Exports the report generated to a CSV file. Only static '
                                                     'features are included.')
 
-    parser.add_argument('-co', '--color', help='Employs the termcolor library to print messages in a pretty format.',
-                        action='store_true', default=False)
+    parser.add_argument('--color', dest='color', action='store_true')
+    parser.add_argument('--no-color', dest='color', action='store_false')
+    parser.set_defaults(color=True)
 
     if len(sys.argv) == 1:
         parser.print_help()

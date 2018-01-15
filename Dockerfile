@@ -50,6 +50,10 @@ RUN pwd
 
 RUN pwd
 
+RUN pwd
+
+RUN pwd
+
 RUN pwd \
  && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
@@ -77,6 +81,8 @@ EXPOSE 5554 5555
 CMD cd /root/AndroPyTool/ \
  && chmod 744 run_androPyTool.sh \
  && ./run_androPyTool.sh
+
+
 
 
 
