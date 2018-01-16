@@ -54,7 +54,11 @@ RUN pwd \
 
 RUN pwd \
   && cd /root/
-  
+
+
+RUN pwd \
+  && cd /root/
+
 RUN pwd \
  && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
@@ -71,13 +75,13 @@ RUN pwd \
 RUN pwd \
  && cd /root/ \
  && chmod 744 AndroPyTool/DroidBox_AndroPyTool/*.sh \
- && echo "no" | ./AndroPyTool/DroidBox_AndroPyTool/createDroidBoxDevice.sh \
+ && echo "no" | ./AndroPyTool/DroidBox_AndroPyTool/createDroidBoxDevice.sh
+
+RUN adb devices; exit 0
 
 VOLUME /apks
 
 EXPOSE 5554 5555
-
-RUN chmod 744 /root/AndroPyTool/androPyTool.py
 
 WORKDIR /root/AndroPyTool/
 

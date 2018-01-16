@@ -83,7 +83,7 @@ def main():
     parser.add_argument('-f', '--filter', help='Filter valid and invalid Apks (Recommended).', default=False,
                         required=False, action='store_true')
 
-    parser.add_argument('-vt', '--virustotal', help='Analyse applications with the VirusTotal service. '
+    parser.add_argument('-vt', '--virustotal_api_key', help='Analyse applications with the VirusTotal service. '
                                                     'It must be followed by a VirusTotal API key.', default=None,
                         required=False)
 
@@ -126,14 +126,14 @@ def main():
     source_folder = args.source
 
     step_filter_apks = True
-    step_analyse_virus_total = args.virustotal
+    step_analyse_virus_total = args.virustotal_api_key
     step_filter_bw_mw = True
     step_run_flowdroid = True
     step_run_droidbox = True
 
     if not args.allsteps:
         step_filter_apks = args.filter
-        step_analyse_virus_total = args.virustotal
+        step_analyse_virus_total = args.virustotal_api_key
         step_filter_bw_mw = args.classify
         step_run_flowdroid = args.flowdroid
         step_run_droidbox = args.droidbox
