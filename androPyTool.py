@@ -165,10 +165,10 @@ def print_message(message, with_color, color):
         print message
 
 
-def execute_andro_py_tool_steps(source_folder, step_filter_apks, virus_total_api_key=None, step_filter_bw_mw,
+def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_cleanup,
                                 package_index, class_index, system_commands_index, export_mongodb, exportCSV,
-                                with_color):
+                                with_color, virus_total_api_key=None,):
 
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
