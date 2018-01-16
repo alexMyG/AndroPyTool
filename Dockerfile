@@ -53,6 +53,9 @@ RUN pwd \
   && cd /root/
 
 RUN pwd \
+  && cd /root/
+  
+RUN pwd \
  && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
  && wget https://github.com/pjlantz/droidbox/releases/download/v4.1.1/DroidBox411RC.tar.gz \
