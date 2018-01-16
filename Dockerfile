@@ -44,14 +44,13 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERM=linux \
 	TERMINFO=/etc/terminfo
 
-RUN cd /root/ \
- && pwd 
+RUN pwd
 
-RUN cd /root/ \
- && pwd 
+RUN pwd \
+  && cd /root/
 
-RUN cd /root/ \
- && pwd 
+RUN pwd \
+  && cd /root/
 
 RUN pwd \
  && cd /root/ \
@@ -61,7 +60,8 @@ RUN pwd \
  && cp -r DroidBox_4.1.1/images AndroPyTool/DroidBox_AndroPyTool/images \
  && pip install wheel \
  && pip install -r AndroPyTool/requirements.txt \
- && touch AndroPyTool/avclass/__init__.py
+ && touch AndroPyTool/avclass/__init__.py \
+ && chmod 744 /root/AndroPyTool/run_androPyTool.sh
 
 
 # Preparing droidbox
@@ -74,9 +74,13 @@ VOLUME /apks
 
 EXPOSE 5554 5555
 
-CMD cd /root/AndroPyTool/ \
- && chmod 744 run_androPyTool.sh \
- && ./run_androPyTool.sh
+RUN chmod 744 /root/AndroPyTool/androPyTool.py
+
+WORKDIR /root/AndroPyTool/
+
+ENTRYPOINT ["python", "-u", "/root/AndroPyTool/androPyTool.py"]
+
+
 
 
 

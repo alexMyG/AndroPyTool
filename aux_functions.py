@@ -55,11 +55,6 @@ def check_overloaded_methods(dic):
             print '\nOVERCHARGED!!!\n'
 
 
-def save_single_analysis(name, db):
-    with open(name, 'w') as fp:
-        json.dump(db, fp, sort_keys=True, indent=4)
-
-
 def load_from_json(name):
     if os.path.isfile(name):
         with open(name, 'r') as fp:

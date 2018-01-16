@@ -68,9 +68,11 @@ def main():
                                                                      "apks are contained. ",
         formatter_class=RawTextHelpFormatter)
 
-    parser.add_argument('-all', '--allsteps', help='Executes all steps of AndroPyTool (Recommended). If this option is '
+    parser.add_argument('-all', '--allsteps', help='Executes all steps of AndroPyTool (Recommended). In order to obtain'
+                                                   ' a VirusTotal report, the argument -vt must be also provided '
+                                                   'followed by a VirusTotal API key. If the -all option is '
                                                    'not provided, then only the last step is executed plus the '
-                                                   'provided arguments', action='store_true')
+                                                   'provided arguments. ', action='store_true')
 
     parser.add_argument('-s', '--source', help='Source directory for APKs', required=True)
 
@@ -82,8 +84,8 @@ def main():
                         required=False, action='store_true')
 
     parser.add_argument('-vt', '--virustotal', help='Analyse applications with the VirusTotal service. '
-                                                    'An API key must be provided in info/vt_key', default=False,
-                        required=False, action='store_true')
+                                                    'It must be followed by a VirusTotal API key.', default=None,
+                        required=False)
 
     parser.add_argument('-cl', '--classify', help='Classify apps between malware or benignware based on the'
                                                   'VirusTotal reports. --virustotal argument has to be set',
@@ -124,7 +126,7 @@ def main():
     source_folder = args.source
 
     step_filter_apks = True
-    step_analyse_virus_total = True
+    step_analyse_virus_total = args.virustotal
     step_filter_bw_mw = True
     step_run_flowdroid = True
     step_run_droidbox = True
@@ -136,13 +138,13 @@ def main():
         step_run_flowdroid = args.flowdroid
         step_run_droidbox = args.droidbox
 
-        if step_analyse_virus_total is False and step_filter_bw_mw is True:
-            print "ERROR!: Option -cl --classify requires -vt --virustotal."
-            sys.exit(0)
+    if step_analyse_virus_total is False and step_filter_bw_mw is True:
+        print "ERROR!: Option -cl --classify requires -vt --virustotal."
+        sys.exit(0)
 
     execute_andro_py_tool_steps(source_folder=source_folder,
                                 step_filter_apks=step_filter_apks,
-                                step_analyse_virus_total=step_analyse_virus_total,
+                                virus_total_api_Key=step_analyse_virus_total,
                                 step_filter_bw_mw=step_filter_bw_mw,
                                 step_run_flowdroid=step_run_flowdroid,
                                 step_run_droidbox=step_run_droidbox,
@@ -163,10 +165,11 @@ def print_message(message, with_color, color):
         print message
 
 
-def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_virus_total, step_filter_bw_mw,
+def execute_andro_py_tool_steps(source_folder, step_filter_apks, virus_total_api_key=None, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_cleanup,
                                 package_index, class_index, system_commands_index, export_mongodb, exportCSV,
                                 with_color):
+
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
     It generates a folder tree containing all generated reports and features files
@@ -175,7 +178,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     ----------
     :param source_folder: Source directory containing apks to extract features and perform analysis
     :param step_filter_apks:  If apks are filtered between valid or invalid apks using Androguard
-    :param step_analyse_virus_total: If apks are analysed using the VirusTotal service
+    :param virus_total_api_Key: VirusTotal service API key
     :param step_filter_bw_mw: If apks are filtered between benignware and malware according to the Virustotal report
     :param step_run_flowdroid: If flowdroid is executed with all the samples
     :param step_run_droidbox: If droidbox is executed with all the samples
@@ -212,13 +215,13 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_analyse_vi
     ################################################
     # STEP 2 - Analyse with VirusTotal
     ################################################
-    if step_analyse_virus_total:
+    if virus_total_api_key is not None:
         print_message("\n\n>>>> AndroPyTool -- STEP 2: Analysing with VirusTotal\n", with_color, "green")
 
         analyse_virustotal(source_directory=join_dir(source_folder, APKS_DIRECTORY),
                            vt_analysis_output_folder=join_dir(source_folder, VIRUSTOTAL_FOLDER),
                            output_samples_folder=join_dir(source_folder, APKS_DIRECTORY),
-                           with_color=with_color)
+                           with_color=with_color, vt_api_key=virus_total_api_key)
 
         sleep(1)
 

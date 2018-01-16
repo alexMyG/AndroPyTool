@@ -163,7 +163,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     print "ANALYSING APKS..."
     for analyze_apk in tqdm(apk_list):
 
-        general_info_dict = collections.OrderedDict()
+        pre_static_dict = collections.OrderedDict()
 
         # Getting the name of the folder that contains all apks and folders with apks
         base_folder = source_directory.split("/")[-1]
@@ -173,7 +173,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         apk_name_no_extensions = "".join(apk_filename.split("/")[-1].split(".")[:-1])
 
-        general_info_dict['Filename'] = apk_filename
+        pre_static_dict['Filename'] = apk_filename
 
         hasher_md5 = hashlib.md5()
         hasher_sha256 = hashlib.sha256()
@@ -188,14 +188,14 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         sha256 = hasher_sha256.hexdigest()
         sha1 = hasher_sha1.hexdigest()
 
-        general_info_dict["md5"] = md5
-        general_info_dict["sha256"] = sha256
-        general_info_dict["sha1"] = sha1
+        pre_static_dict["md5"] = md5
+        pre_static_dict["sha256"] = sha256
+        pre_static_dict["sha1"] = sha1
 
         if label is not None:
-            general_info_dict["Label"] = label
+            pre_static_dict["Label"] = label
         else:
-            general_info_dict["Label"] = "/".join(apk_filename.split("/")[:-1])
+            pre_static_dict["Label"] = "/".join(apk_filename.split("/")[:-1])
 
         androguard_apk_object = apk.APK(analyze_apk)
 
@@ -296,6 +296,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
             if isfile(join_dir(flowdroid_folder, apk_name_no_extensions + ".csv")):
                 flowdroid_field = join_dir(flowdroid_folder, apk_name_no_extensions + ".csv")
+        static_analysis_dict['FlowDroid'] = flowdroid_field
 
         ############################################################
         # READING VIRUSTOTAL FILE TO INCLUDE IN JSON
@@ -317,13 +318,12 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         if virus_total_reports_folder and avclass:
             vt_file_name = join_dir(virus_total_reports_folder, apk_name_no_extensions + ".json")
             if isfile(vt_file_name):
-                general_info_dict["avclass"] = get_avclass_label(vt_file_name)
+                pre_static_dict["avclass"] = get_avclass_label(vt_file_name)
 
         ############################################################
         # FILLING APK JSON FIELD
         ############################################################
-        apk_total_analysis = OrderedDict([("General_info", general_info_dict),
-                                          ("FlowDroid", flowdroid_field),
+        apk_total_analysis = OrderedDict([("Pre_static_analysis", pre_static_dict),
                                           ("Static_analysis", static_analysis_dict),
                                           ("Dynamic_analysis", dynamic_analysis_dict),
                                           ("VirusTotal", virus_total_dict)])
@@ -334,8 +334,12 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         # SAVING ANALYSIS FOR INDIVIDUAL APK WHEN SELECTED
         ############################################################
         if single_analysis:
-            save_single_analysis(join_dir(output_folder, apk_filename.split("/")[-1].replace('.apk', '-analysis.json')),
-                                 apk_total_analysis)
+            # save_single_analysis(join_dir(output_folder, apk_filename.split("/")[-1].
+            # replace('.apk', '-analysis.json')),
+            #                     apk_total_analysis)
+
+            save_as_json(apk_total_analysis, output_name=join_dir(output_folder, apk_name_no_extensions +
+                                                                  "-analysis.json"))
 
     save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
 
@@ -390,7 +394,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
             list_apks = database.keys()
 
-            list_fields = database[list_apks[0]]["General_info"].keys()
+            list_fields = database[list_apks[0]]["Pre_static_analysis"].keys()
             list_fields += ["Package name"]
             list_fields += ["Main activity"]
 
@@ -410,7 +414,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
             for apk_id in list_apks:
                 apk_dict = {}
-                apk_dict.update(database[apk_id]["General_info"])
+                apk_dict.update(database[apk_id]["Pre_static_analysis"])
 
                 # Adding fields from static analysis
                 apk_dict.update({"Package name": database[apk_id]["Static_analysis"]["Package name"],

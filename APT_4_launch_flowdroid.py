@@ -116,6 +116,5 @@ def run_flowdroid(source_directory, output_folder, with_color=True):
         with open(join_dir(output_folder, apk_id.replace(".apk", ".json")), "w") as output:
             output.write(str(stdout))
 
-
 if __name__ == '__main__':
     main()

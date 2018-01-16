@@ -13,7 +13,6 @@ from tqdm import *
 from os import listdir
 from termcolor import colored
 from os.path import isfile, join
-from aux_functions import load_file
 from simplejson import JSONDecodeError
 from argparse import RawTextHelpFormatter
 from os.path import join as join_dir
@@ -22,9 +21,9 @@ from os.path import join as join_dir
 
 os.path.dirname(os.path.abspath(__file__))
 
-VT_KEY = load_file("info/vt_key")[0]
-
 VT_ANALYSIS_DIRECTORY_NAME = "/../VT_ANALYSIS/"
+
+VT_KEY = None
 
 
 def print_message(message, with_color, color):
@@ -90,7 +89,8 @@ def main():
                        with_color=True)
 
 
-def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_samples_folder=None, with_color=True):
+def analyse_virustotal(source_directory, vt_api_key, vt_analysis_output_folder=None, output_samples_folder=None,
+                       with_color=True):
     """
     Analyses a set of APK files with the VirusTotal service
 
@@ -101,9 +101,12 @@ def analyse_virustotal(source_directory, vt_analysis_output_folder=None, output_
     :param output_samples_folder:  Folder where apk files are saved after analysed with VirusTotal
     :return:
     """
-    if len(VT_KEY) != 64:
+    if len(vt_api_key) != 64:
         print 'ERROR! - invalid vt_key file. Please, provide a virustotal key!'
         sys.exit(0)
+
+    global VT_KEY
+    VT_KEY = vt_api_key
 
     if vt_analysis_output_folder is None:
         vt_analysis_output_folder = join_dir(source_directory, VT_ANALYSIS_DIRECTORY_NAME)
