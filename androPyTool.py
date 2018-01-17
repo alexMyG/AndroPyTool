@@ -53,7 +53,7 @@ FEATURES_FILES = "Features_files/"
 
 VIRUSTOTAL_THRESHOLD = 1
 OUTPUT_GLOBAL_FILE_FLOWDROID = "flowdroid_global.csv"
-DROIDBOX_ANALYSIS_DURATION = 30  # seconds
+DROIDBOX_ANALYSIS_DURATION = 300  # seconds
 DROIDBOX_GUI_MODE = False
 
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))

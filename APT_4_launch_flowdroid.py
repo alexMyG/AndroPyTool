@@ -20,7 +20,7 @@ FLOWDROID_FOLDER = working_directory + "FlowDroid/"
 # performance
 ANDROID_PLATFORMS_FOLDER = working_directory + 'FlowDroid/android-platforms/platforms'
 
-MAX_MEMORY = 1  # GIGABYTES
+MAX_MEMORY = 80  # GIGABYTES
 
 LIBRARIES_FLOWDROID = "soot-trunk.jar:soot-infoflow.jar:soot-infoflow-android.jar:slf4j-api-1.7.5.jar:slf4j-simple-" \
                       "1.7.5.jar:axml-2.0.jar"
