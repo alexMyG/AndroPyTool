@@ -44,5 +44,10 @@ def get_avclass_label(path_vt_file):
     sys.stdout = old_stdout
 
     result_string = result.getvalue()
+    if result_string is None or result_string == "":
+        return "None"
 
     return result_string.split()[1]
+
+if __name__ == '__main__':
+    get_avclass_label("/home/alejandro/ANDROID_DATASET_FULL/VT_analysis/743833db52e2f5fc14fcd38561610379732545164b3d02ab7ecda2eef0115c9a.json")

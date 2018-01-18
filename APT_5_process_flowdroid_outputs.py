@@ -147,6 +147,12 @@ def process_flowdroid_outputs(flowdroid_analyses_folder, output_folder_individua
     matrices = {}
     for flow_file in tqdm(flowdroid_analysis_files):
 
+        output_individual_name = os.path.join(output_folder_individual_csv,
+                                              os.path.basename(flow_file).replace(".json", "") + ".csv")
+
+        if os.path.isfile(output_individual_name):
+            continue
+
         # apk_id = flow_file.split("/")[-1]
         with open(flow_file, 'r') as fp:
             content = fp.readlines()
@@ -186,8 +192,7 @@ def process_flowdroid_outputs(flowdroid_analyses_folder, output_folder_individua
 
         matrix = fill_matrix_flows(matrix, categories_list, categories_map, dic_new)
 
-        output_individual_name = os.path.join(output_folder_individual_csv,
-                                              os.path.basename(flow_file).replace(".json", "") + ".csv")
+
         save_as_csv(output_individual_name, matrix, categories_list)
 
         matrices[flow_file] = matrix

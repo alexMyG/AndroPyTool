@@ -44,21 +44,7 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERM=linux \
 	TERMINFO=/etc/terminfo
 
-RUN pwd
-
-RUN pwd \
-  && cd /root/
-
-RUN pwd \
-  && cd /root/
-
-RUN pwd \
-  && cd /root/
-
-
-RUN pwd \
-  && cd /root/
-
+  
 RUN pwd \
  && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \

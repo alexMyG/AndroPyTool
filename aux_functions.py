@@ -34,7 +34,7 @@ def cleanup(analyze_apk):
 def save_as_json(data, output_name):
     with open(str(output_name), 'w') as fp:
         json.dump(data, fp, indent=4)
-    print '[*] Analysis saved into:', str(output_name)
+    # print '[*] Analysis saved into:', str(output_name)
 
 
 def save_as_csv(data):
