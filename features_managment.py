@@ -1,4 +1,5 @@
 import re
+import os
 import lxml.etree as et
 
 from aux_functions import *
@@ -28,7 +29,7 @@ def opcodes_analysis(androguard_apk):
 def check_for_intents(manifest, name, mode):
     intent_results = []
 
-    if os.stat(manifest).st_size == 0:
+    if not os.path.isfile(manifest) or os.stat(manifest).st_size == 0:
         return ['']
 
     tree = et.parse(manifest)
