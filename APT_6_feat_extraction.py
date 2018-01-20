@@ -163,8 +163,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     print "ANALYSING APKS..."
     for analyze_apk in tqdm(apk_list):
 
-        pre_static_dict = collections.OrderedDict()
-
         # Getting the name of the folder that contains all apks and folders with apks
         base_folder = source_directory.split("/")[-1]
 
@@ -173,7 +171,14 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         apk_name_no_extensions = "".join(apk_filename.split("/")[-1].split(".")[:-1])
 
-        pre_static_dict['Filename'] = apk_filename
+        if os.path.isfile(join_dir(output_folder, apk_filename.split("/")[-1].replace('.apk', '-analysis.json'))):
+            database[apk_filename.replace('.apk', '')] = json.load(join_dir(output_folder, apk_filename.split("/")[-1].
+                                                                            replace('.apk', '-analysis.json')))
+            continue
+
+        general_info_dict = collections.OrderedDict()
+
+        general_info_dict['Filename'] = apk_filename
 
         hasher_md5 = hashlib.md5()
         hasher_sha256 = hashlib.sha256()
