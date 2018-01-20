@@ -18,10 +18,12 @@ RUN apt-get update \
 		gcc \
  		python-tk \
  		curl \
- && add-apt-repository ppa:webupd8team/java -y \
- && apt-get update \
- && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
- && apt-get install -y oracle-java8-installer \
+ #&& add-apt-repository ppa:webupd8team/java -y \
+ #&& apt-get update \
+ #&& echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
+ #&& apt-get install -y oracle-java8-installer \
+ && echo "y" | apt-get install openjdk-8-jdk \
+ && echo "y" | apt-get install openjdk-8-jre \
  && apt-get install -y python-setuptools \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
@@ -45,6 +47,9 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERMINFO=/etc/terminfo
 
 RUN cd /root/
+
+RUN cd /root/
+
 
 RUN pwd \
  && cd /root/ \
@@ -72,8 +77,8 @@ EXPOSE 5554 5555
 
 WORKDIR /root/AndroPyTool/
 
-ENTRYPOINT ["python", "-u", "/root/AndroPyTool/androPyTool.py"]
-
+# ENTRYPOINT ["python", "-u", "/root/AndroPyTool/androPyTool.py"]
+CMD cd
 
 
 
