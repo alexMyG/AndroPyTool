@@ -176,9 +176,9 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                                                                             replace('.apk', '-analysis.json'))))
             continue
 
-        general_info_dict = collections.OrderedDict()
+        pre_static_dict = collections.OrderedDict()
 
-        general_info_dict['Filename'] = apk_filename
+        pre_static_dict['Filename'] = apk_filename
 
         hasher_md5 = hashlib.md5()
         hasher_sha256 = hashlib.sha256()
