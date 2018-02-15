@@ -229,6 +229,13 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         # API calls and Strings
         list_smali_api_calls, list_smali_strings = read_strings_and_apicalls(analyze_apk, API_PACKAGES_LIST,
                                                                              API_CLASSES_LIST)
+        for api_call in list_smali_api_calls.keys():
+            new_api_call = '.'.join(api_call.split(".")[:-1])
+            if new_api_call in list_smali_api_calls.keys():
+                list_smali_api_calls[new_api_call] = list_smali_api_calls[new_api_call] + list_smali_api_calls[api_call]
+            else:
+                list_smali_api_calls[new_api_call] = list_smali_api_calls[api_call]
+                del list_smali_api_calls[api_call]
         static_analysis_dict['API calls'] = list_smali_api_calls
         static_analysis_dict['Strings'] = Counter(filter(None, list_smali_strings))
 
@@ -245,7 +252,9 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         # Intents of activities
         intents_activities = collections.OrderedDict()
+        print "LIST ACTIVITIES: " + str(list_activities)
         for activity in list_activities:
+            
             intents_activities[activity] = check_for_intents(join_dir(analyze_apk.replace('.apk', ''),
                                                                       'AndroidManifest.xml'),
                                                              activity, 'activity')
