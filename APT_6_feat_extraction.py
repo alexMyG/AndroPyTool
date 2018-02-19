@@ -239,6 +239,29 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         static_analysis_dict['API calls'] = list_smali_api_calls
         static_analysis_dict['Strings'] = Counter(filter(None, list_smali_strings))
 
+        # API packages
+
+        API_packages_dict = collections.OrderedDict()
+        android_list_packages_lenghts = [len(x.split(".")) for x in API_PACKAGES_LIST]
+
+        list_api_calls_keys = list_smali_api_calls.keys()
+        for api_call in list_api_calls_keys:
+            score = 0
+            package_chosen = None
+            for i, package in enumerate(API_PACKAGES_LIST):
+                len_package = android_list_packages_lenghts[i]
+                if api_call.startswith(package) and len_package > score:
+                    score = len_package
+                    package_chosen = package
+            if package_chosen is not None:
+                if not package_chosen in API_packages_dict.keys():
+                    API_packages_dict[package_chosen] = list_smali_api_calls[api_call]
+                else:
+                    API_packages_dict[package_chosen] += list_smali_api_calls[api_call]
+
+        static_analysis_dict['API packages'] = API_packages_dict
+        
+
         # System commands
         list_system_commands = read_system_commands(list_smali_strings, API_SYSTEM_COMMANDS)
         static_analysis_dict['System commands'] = Counter(list_system_commands)
@@ -252,7 +275,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         # Intents of activities
         intents_activities = collections.OrderedDict()
-        print "LIST ACTIVITIES: " + str(list_activities)
         for activity in list_activities:
             
             intents_activities[activity] = check_for_intents(join_dir(analyze_apk.replace('.apk', ''),
@@ -387,6 +409,11 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                     database[apk_key]["Static_analysis"]["Intents"][intent]
                 del database[apk_key]["Static_analysis"]["Intents"][intent]
 
+            for package in database[apk_key]["Static_analysis"]["API packages"].keys():
+                database[apk_key]["Static_analysis"]["API packages"][package.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["API packages"][package]
+                del database[apk_key]["Static_analysis"]["API packages"][package]
+
         client = MongoClient('mongodb://' + export_mongodb)
         # Creating database
         db = client['AndroPyTool_database']
@@ -412,7 +439,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             list_fields += ["Package name"]
             list_fields += ["Main activity"]
 
-            sub_fields_static_analysis = ["Permissions", "Opcodes", "API calls", "Strings", "System commands", "Intents",
+            sub_fields_static_analysis = ["Permissions", "Opcodes", "API calls", "API packages", "Strings", "System commands", "Intents",
                                           "Activities", "Services", "Receivers"]
 
             dict_subfields = {}
