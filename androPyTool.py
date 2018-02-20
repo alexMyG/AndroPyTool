@@ -95,8 +95,8 @@ def main():
 
     parser.add_argument('-dr', '--droidbox', help='Run droidbox.', default=False, required=False, action='store_true')
 
-    parser.add_argument('-c', '--cleanup', default=True,
-                        help='Perform cleanup deleting temporary working files. Default: True', action='store_false')
+    parser.add_argument('-c', '--nocleanup', default=False,
+                        help='Perform cleanup deleting temporary working files. Default: True', action='store_true')
 
     parser.add_argument('-P', '--packageIndex', default='info/package_index.txt',
                         help='TXT file with all Android API packages. Default: info/package_index.txt')
@@ -148,7 +148,7 @@ def main():
                                 step_run_flowdroid=step_run_flowdroid,
                                 step_run_droidbox=step_run_droidbox,
                                 save_single_analysis=args.single,
-                                perform_cleanup=args.cleanup,
+                                perform_nocleanup=args.nocleanup,
                                 package_index=args.packageIndex,
                                 class_index=args.classIndex,
                                 system_commands_index=args.systemCommandsIndex,
@@ -166,7 +166,7 @@ def print_message(message, with_color, color):
 
 
 def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_mw,
-                                step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_cleanup,
+                                step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_nocleanup,
                                 package_index, class_index, system_commands_index, export_mongodb, exportCSV,
                                 with_color, virus_total_api_key=None):
 
@@ -183,7 +183,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_
     :param step_run_flowdroid: If flowdroid is executed with all the samples
     :param step_run_droidbox: If droidbox is executed with all the samples
     :param save_single_analysis: If an individual features report is generated for each sample
-    :param perform_cleanup: If unnecesary files generated are removed
+    :param perform_nocleanup: If unnecesary files generated are removed
     :param package_index: File describing Android API packages
     :param class_index: File describing Android API classes
     :param system_commands_index: File describing Android system commands
@@ -299,7 +299,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_
                        virus_total_reports_folder=join_dir(source_folder, VIRUSTOTAL_FOLDER),
                        flowdroid_folder=join_dir(source_folder, FLOWDROID_PROCESSED_FOLDER),
                        output_folder=join_dir(source_folder, FEATURES_FILES),
-                       clean_up=perform_cleanup,
+                       noclean_up=perform_nocleanup,
                        package_index_file=package_index,
                        classes_index_file=class_index,
                        system_commands_file=system_commands_index,

@@ -68,8 +68,8 @@ def main():
     parser.add_argument('-o', '--output',
                         help='Output folder name to save analysis. ', required=True)
 
-    parser.add_argument('-c', '--cleanup', default=True,
-                        help='Perform cleanup deleting temporary working files. Default: True', action='store_false')
+    parser.add_argument('-c', '--nocleanup', default=False,
+                        help='Perform cleanup deleting temporary working files. Default: True', action='store_true')
 
     parser.add_argument('-P', '--Package', default='info/package_index.txt',
                         help='TXT file with all Android API packages. Default: info/package_index.txt')
@@ -94,7 +94,7 @@ def main():
     features_extractor(apks_directory=args.source, single_analysis=args.Single,
                        dynamic_analysis_folder=args.DynamicAnalysis,
                        virus_total_reports_folder=args.VirusTotal, output_folder=args.output,
-                       clean_up=args.cleanup, flowdroid_folder=args.FlowDroid, package_index_file=args.Package,
+                       noclean_up=args.nocleanup, flowdroid_folder=args.FlowDroid, package_index_file=args.Package,
                        classes_index_file=args.Class, system_commands_file=args.SystemC, label=args.label,
                        avclass=args.AVClass, export_mongodb=args.mongodbURI, export_csv=args.exportCSV)
 
@@ -106,7 +106,7 @@ def main():
 # MAIN METHOD
 ############################################################
 def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder, virus_total_reports_folder,
-                       flowdroid_folder, output_folder, clean_up, package_index_file, classes_index_file,
+                       flowdroid_folder, output_folder, noclean_up, package_index_file, classes_index_file,
                        system_commands_file, label, avclass, export_mongodb, export_csv):
     """
     Extracts features from a set of samples
@@ -119,7 +119,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     :param virus_total_reports_folder: Folder containing VirusTotal reports
     :param flowdroid_folder: Folder containing flowdroid reports
     :param output_folder: Folder where features files are saved
-    :param clean_up: If unnecesary files generated are removed
+    :param noclean_up: If unnecesary files generated are removed
     :param package_index_file: File describing Android API packages
     :param classes_index_file: File describing Android API classes
     :param system_commands_file: File describing Android system commands
@@ -299,7 +299,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                                                           intent, 'receiver')
         static_analysis_dict['Receivers'] = intents_receivers
 
-        if clean_up:
+        if not noclean_up:
             cleanup(analyze_apk)
 
         ############################################################
