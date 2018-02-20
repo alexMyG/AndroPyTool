@@ -37,8 +37,7 @@ def check_for_intents(manifest, name, mode):
     for child in root:
         child.find('application')
         for x in child.iter(mode):
-            # print x.attrib
-            if name in [t.encode('utf-8') for t in x.attrib.values()]:
+            if any(name.endswith(t.encode('utf-8')) for t in x.attrib.values()):
                 for y in x:
                     if 'intent-filter' in y.tag:
                         for z in y:

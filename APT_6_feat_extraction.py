@@ -276,6 +276,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         # Intents of activities
         intents_activities = collections.OrderedDict()
         for activity in list_activities:
+
             
             intents_activities[activity] = check_for_intents(join_dir(analyze_apk.replace('.apk', ''),
                                                                       'AndroidManifest.xml'),
@@ -293,6 +294,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         # Intents of receivers
         intents_receivers = collections.OrderedDict()
         for intent in list_receivers:
+            print "SEARCHING FOR INTENT: -" + intent
             intents_receivers[intent] = check_for_intents(join_dir(analyze_apk.replace('.apk', '/'),
                                                                    'AndroidManifest.xml'),
                                                           intent, 'receiver')
