@@ -16,13 +16,12 @@ def list_files(directory, string):
 def unzip_apk(analyze_apk):
     # directory = source_directory + os.path.basename(filename).replace('.apk', '')
     directory = analyze_apk.replace('.apk', '/')
-    # if not os.path.exists(directory):
-    #	os.makedirs(directory)
+    if not os.path.exists(directory):
+    
+        command = "java -jar Libraries/apktool.jar d " + analyze_apk + " -o " + directory + " -f"
 
-    command = "java -jar Libraries/apktool.jar d " + analyze_apk + " -o " + directory + " -f"
-
-    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    output, err = p.communicate()
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        output, err = p.communicate()
 
 
 def cleanup(analyze_apk):

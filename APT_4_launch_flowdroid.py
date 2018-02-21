@@ -91,10 +91,11 @@ def run_flowdroid(source_directory, output_folder, with_color=True):
     for apk_path in tqdm(list_apks):
 
         apk_id = os.path.basename(apk_path)
+        print "RUNNING FLOWDROID FOR: " + str(apk_id)
 
-        if os.path.isfile(join_dir(output_folder, apk_id.replace(".apk", ".json"))):
+        if os.path.isfile(join_dir(output_folder, apk_id.replace(".apk", ".json"))) or "assets" in apk_id:
             continue
-
+        print "TRUE TRUE TRUE"
         flowdroid_call = get_call_flowdroid(apk_path)
 
         origen_wd = os.getcwd()
