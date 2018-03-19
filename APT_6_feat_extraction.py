@@ -2,6 +2,7 @@ import sys
 import csv
 import time
 import bson
+import json
 import os.path
 import hashlib
 import argparse
@@ -320,19 +321,35 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 dynamic_tool_name = filter(None, path_to_folder)[-1]
                 for extension in POSSIBLE_DYNAMIC_FILES_EXTENSIONS:
                     if os.path.isfile(join_dir(dynamic_analysis_tool_folder, apk_name_no_extensions + extension)):
-                        dynamic_analysis_dict[dynamic_tool_name] = join_dir(dynamic_analysis_tool_folder,
-                                                                            apk_name_no_extensions + extension)
+
+                        dynamic_file_name = join_dir(dynamic_analysis_tool_folder, apk_name_no_extensions + extension)
+
+                        # If the file has .json extension, it is added to the global json
+                        # If not, the field is filled with the path to the dynamic analysis file
+                        if extension == ".json":
+                            dynamic_analysis_dict[dynamic_tool_name] = json.load(open(dynamic_file_name))
+                        else:
+                            dynamic_analysis_dict[dynamic_tool_name] = dynamic_file_name
+
                         break
         ############################################################
         # READING FLOWDROID ANALYSIS FILES TO INCLUDE IN JSON
         # ONLY THE NAME OF THE FILE IS INCLUDED
         # TODO EACH FILE MUST BE STORED IN A FOLDER NAMED AS THE TOOL USED
         ############################################################
-        flowdroid_field = ""
+        flowdroid_file = ""
         if flowdroid_folder:
 
             if isfile(join_dir(flowdroid_folder, apk_name_no_extensions + ".csv")):
-                flowdroid_field = join_dir(flowdroid_folder, apk_name_no_extensions + ".csv")
+                flowdroid_file = join_dir(flowdroid_folder, apk_name_no_extensions + ".csv")
+        # static_analysis_dict['FlowDroid'] = flowdroid_field
+
+        data_flowdroid_csv = pd.read_csv(flowdroid_file)
+
+        # Setting column names with the first column
+        data_flowdroid_csv.index = data_flowdroid_csv["Sources\\Sinks"]
+
+        flowdroid_field = data_flowdroid_csv.to_dict()
         static_analysis_dict['FlowDroid'] = flowdroid_field
 
         ############################################################
