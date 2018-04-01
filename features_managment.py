@@ -102,8 +102,12 @@ def read_smali_files(smali_list, api_packages_list, api_classes_list):
 
             if len(elem) != 2:
                 # TODO CHECK IF CORRECT. Class not defined, so it must came from Object, but should be checked
-                package = elem[1]
-                method = elem[2]
+                try:
+                    package = elem[1]
+                    method = elem[2]
+                except IndexError:
+                    print "Incorrect API calls transcription"
+
             else:
                 package = "Object"
                 method = elem[1]
