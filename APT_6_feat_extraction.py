@@ -348,6 +348,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         # Setting column names with the first column
         data_flowdroid_csv.index = data_flowdroid_csv["Sources\\Sinks"]
+        del data_flowdroid_csv["Sources\\Sinks"]
 
         flowdroid_field = data_flowdroid_csv.to_dict()
         static_analysis_dict['FlowDroid'] = flowdroid_field
@@ -446,50 +447,168 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     # EXPORTING TO CSV
     ############################################################
     if export_csv is not None:
-        with open('dict.csv', 'wb') as csv_file:
 
-            # FlowDroid and Dynamic analysis fields are not included into the CSV since they only report the path to the
-            # related report, so it cannot be considered as a feature
+        set_permissions = set()
+        set_opcodes = set()
+        set_apicalls = set()
+        set_systemcommands = set()
+        set_intents_activities = set()
+        set_intents_services = set()
+        set_intents_receivers = set()
+        set_api_packages = set()
 
-            list_apks = database.keys()
+        for apk in tqdm(database.keys()):
+            apk_dict = database[apk]
 
-            list_fields = database[list_apks[0]]["Pre_static_analysis"].keys()
-            list_fields += ["Package name"]
-            list_fields += ["Main activity"]
+            kind = apk.split("/")[0]
+            hash_app = apk.split("/")[1]
 
-            sub_fields_static_analysis = ["Permissions", "Opcodes", "API calls", "API packages", "Strings", "System commands", "Intents",
-                                          "Activities", "Services", "Receivers"]
+            set_permissions.update(apk_dict["Static_analysis"]["Permissions"])
+            set_opcodes.update(apk_dict["Static_analysis"]["Opcodes"])
+            set_apicalls.update(apk_dict["Static_analysis"]["API calls"])
+            set_systemcommands.update(apk_dict["Static_analysis"]["System commands"])
+            
+            for activity in apk_dict["Static_analysis"]["Activities"]:
+                if apk_dict["Static_analysis"]["Activities"][activity] is not None and \
+                    len(apk_dict["Static_analysis"]["Activities"][activity]) > 0:
+                    set_intents_activities.update(apk_dict["Static_analysis"]["Activities"][activity])
 
-            dict_subfields = {}
-            # Here, each subfield of the static analysis field is included into the list
-            for apk_id in list_apks:
-                for sub_field in sub_fields_static_analysis:
-                    list_fields += database[apk_id]["Static_analysis"][sub_field]
+            for service in apk_dict["Static_analysis"]["Services"]:
+                if apk_dict["Static_analysis"]["Services"][service] is not None and \
+                    len(apk_dict["Static_analysis"]["Services"][service]) > 0:
+                    set_intents_services.update(apk_dict["Static_analysis"]["Services"][service])
 
-                    dict_subfields[sub_field] = database[apk_id]["Static_analysis"][sub_field]
+            for receiver in apk_dict["Static_analysis"]["Receivers"]:
+                if apk_dict["Static_analysis"]["Receivers"][receiver] is not None and \
+                    len(apk_dict["Static_analysis"]["Receivers"][receiver]) > 0:
+                    set_intents_receivers.update(apk_dict["Static_analysis"]["Receivers"][receiver])
 
-            writer = csv.DictWriter(csv_file, fieldnames=list_fields)
-            writer.writeheader()
+            set_api_packages.update(apk_dict["Static_analysis"]["API packages"])
 
-            for apk_id in list_apks:
-                apk_dict = {}
-                apk_dict.update(database[apk_id]["Pre_static_analysis"])
+        list_permissions = [x.replace(" ", "") for x in list(set_permissions)]
+        list_opcodes = list(set_opcodes)
+        list_apicalls = list(set_apicalls)
+        list_systemcommands = list(set_systemcommands)
+        list_intents_activities = list(set_intents_activities)
+        list_intents_services = list(set_intents_services)
+        list_intents_receivers = list(set_intents_receivers)
+        list_api_packages = list(set_api_packages)
 
-                # Adding fields from static analysis
-                apk_dict.update({"Package name": database[apk_id]["Static_analysis"]["Package name"],
-                                 "Main activity": database[apk_id]["Static_analysis"]["Main activity"]})
+        for i, apicall in enumerate(list(list_apicalls)):
+            list_apicalls[i] = ".".join(apicall.encode('ascii', 'ignore').split(".")[:-1])
 
-                sub_dict = {}
-                for sub_field in sub_fields_static_analysis:
-                    for value in dict_subfields[sub_field]:
-                        if value in database[apk_id]["Static_analysis"][sub_field]:
-                            sub_dict[value] = 1
-                        else:
-                            sub_dict[value] = 0
+        list_apicalls = list(set(list_apicalls))
+        
 
-                apk_dict.update(sub_dict)
-                writer.writerow(apk_dict)
+        flowdroid_fields = []
+        if flowdroid_folder:
+            apk_dict_example = database[database.keys()[0]]
+            flowdroid_fields = apk_dict_example["Static_analysis"]["FlowDroid"].keys()
+            del flowdroid_fields[flowdroid_fields.index("Sources\\Sinks")]
+        
+        flowdroid_fields_matrix = [(x, y) for x in flowdroid_fields for y in flowdroid_fields]
 
+
+        list_rows = []
+
+        rows_permissions = []
+        rows_opcodes = []
+        rows_apicalls = []
+        rows_systemcommands = []
+        rows_intents_activities = []
+        rows_intents_services = []
+        rows_intents_receivers = []
+        rows_api_packages = []
+                
+        for apk in tqdm(data.keys()):
+            apk_dict = data[apk]
+            label = apk.split("/")[0]
+            hash_app = apk.split("/")[1]
+            list_permissions_filled = [0 for x in range(len(list_permissions))]
+            for i, item in enumerate(list_permissions):
+                if item.replace(" ", "") in apk_dict["Static_analysis"]["Permissions"]:
+                    list_permissions_filled[i] = 1
+
+            list_opcodes_filled = [0 for x in range(len(list_opcodes))]
+            for i, item in enumerate(list_opcodes):
+                if item in apk_dict["Static_analysis"]["Opcodes"]:
+                    list_opcodes_filled[i] = apk_dict["Static_analysis"]["Opcodes"][item]
+
+            list_apicalls_filled = [0 for x in range(len(list_apicalls))]
+            for i, item in enumerate(list_apicalls):
+                if item in apk_dict["Static_analysis"]["API calls"]:
+                    list_apicalls_filled[i] = apk_dict["Static_analysis"]["API calls"][item]
+
+            list_systemcommands_filled = [0 for x in range(len(list_systemcommands))]
+            for i, item in enumerate(list_systemcommands):
+                if item in apk_dict["Static_analysis"]["System commands"]:
+                    list_systemcommands_filled[i] = apk_dict["Static_analysis"]["System commands"][item]
+
+            list_intents_activities_filled = [0 for x in range(len(list_intents_activities))]
+            for i, item in enumerate(list_intents_activities):
+                if item in apk_dict["Static_analysis"]["Activities"]:
+                    list_intents_activities_filled[i] = 1
+
+            list_intents_services_filled = [0 for x in range(len(list_intents_services))]
+            for i, item in enumerate(list_intents_services):
+                if item in apk_dict["Static_analysis"]["Services"]:
+                    list_intents_services_filled[i] = 1
+
+            list_intents_receivers_filled = [0 for x in range(len(list_intents_receivers))]
+            for i, item in enumerate(list_intents_receivers):
+                if item in apk_dict["Static_analysis"]["Receivers"]:
+                    list_intents_receivers_filled[i] = 1
+
+            list_api_packages_filled = [0 for x in range(len(list_api_packages))]
+            for i, item in enumerate(list_api_packages):
+                if item in apk_dict["Static_analysis"]["API packages"]:
+                    list_intents_receivers_filled[i] = 1
+
+            flowdroid_fields_matrix_filled = [0 for x in range(len(flowdroid_fields_matrix))]
+            flow_df = pd.read_csv("FlowDroid_processed/" + hash_app + ".csv")
+            flow_df = flow_df.set_index("Sources\Sinks")
+            for i, item in enumerate(flowdroid_fields_matrix):
+                source, sink = item[0], item[1]
+                flowdroid_fields_matrix_filled[i] = flow_df[source][sink]
+            complete_row = [label] + list_permissions_filled + list_opcodes_filled + list_apicalls_filled + \
+                        list_systemcommands_filled + list_intents_activities_filled + \
+                        list_intents_services_filled + list_intents_receivers_filled + list_api_packages_filled + \
+                        flowdroid_fields_matrix_filled
+
+            rows_permissions.append(list_permissions_filled)
+            rows_opcodes.append(list_opcodes_filled)
+            rows_apicalls.append(list_apicalls_filled)
+            rows_systemcommands.append(list_systemcommands_filled)
+            rows_intents_activities.append(list_intents_activities_filled)
+            rows_intents_services.append(list_intents_services_filled)
+            rows_intents_receivers.append(list_intents_receivers_filled)
+            rows_api_packages.append(list_api_packages_filled)
+
+
+            list_rows.append(complete_row)
+
+        list_permissions = ["PERMISSION-" + x for x in list(list_permissions)]
+        list_opcodes = ["OPCODE-" + x for x in list(list_opcodes)]
+        list_apicalls = ["APICALL-" + x for x in list(list_apicalls)]
+        list_systemcommands = ["SYSTEMCOMMAND-" + x for x in list(list_systemcommands)]
+        list_intents_activities = ["ACTIVITY-" + x for x in list(list_intents_activities)]
+        list_intents_services = ["SERVICE-" + x for x in list(list_intents_services)]
+        list_intents_receivers = ["RECEIVER-" + x for x in list(list_intents_receivers)]
+        list_api_packages = ["APIPACKAGE-" + x for x in list(list_api_packages)]
+
+        flowdroid_fields_matrix_strings = ["FLOWDROID-" + x[0] + "-" + x[1] for x in flowdroid_fields_matrix]
+
+        complete_list_fields = ["label"] + list_permissions + list_opcodes + list_apicalls + \
+                       list_systemcommands + list_intents_activities + list_intents_services + list_intents_receivers + \
+                       list_api_packages + flowdroid_fields_matrix_strings
+
+        with open(export_csv, 'wb') as csv_file:
+
+            csvwriter = csv.writer(csv_file, delimiter=",")
+            csvwriter.writerow(complete_list_fields)
+            print "WRITING CSV FILE..."
+            for row in tqdm(list_rows):
+                csvwriter.writerow(row)
 
 if __name__ == '__main__':
     main()

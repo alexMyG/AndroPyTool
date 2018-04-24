@@ -46,8 +46,6 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERM=linux \
 	TERMINFO=/etc/terminfo
 
-RUN cd /root/
-
 RUN cd /
 
 RUN pwd \

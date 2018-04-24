@@ -1,0 +1,3 @@
+{
+    "python.pythonPath": "${workspaceFolder}/andropytool_env/bin/python"
+}
