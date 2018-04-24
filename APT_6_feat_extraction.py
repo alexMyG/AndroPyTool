@@ -441,8 +441,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         coll.insert_one(database).inserted_id
 
-        # CSV
-
     ############################################################
     # EXPORTING TO CSV
     ############################################################
@@ -457,11 +455,11 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         set_intents_receivers = set()
         set_api_packages = set()
 
-        for apk in tqdm(database.keys()):
-            apk_dict = database[apk]
+        for apk_key in tqdm(database.keys()):
+            apk_dict = database[apk_key]
 
-            kind = apk.split("/")[0]
-            hash_app = apk.split("/")[1]
+            kind = apk_key.split("/")[0]
+            hash_app = apk_key.split("/")[1]
 
             set_permissions.update(apk_dict["Static_analysis"]["Permissions"])
             set_opcodes.update(apk_dict["Static_analysis"]["Opcodes"])
@@ -508,7 +506,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         
         flowdroid_fields_matrix = [(x, y) for x in flowdroid_fields for y in flowdroid_fields]
 
-
         list_rows = []
 
         rows_permissions = []
@@ -520,10 +517,10 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         rows_intents_receivers = []
         rows_api_packages = []
                 
-        for apk in tqdm(data.keys()):
-            apk_dict = data[apk]
-            label = apk.split("/")[0]
-            hash_app = apk.split("/")[1]
+        for apk_key in tqdm(data.keys()):
+            apk_dict = data[apk_key]
+            label = apk_key.split("/")[0]
+            hash_app =apk_keyapk.split("/")[1]
             list_permissions_filled = [0 for x in range(len(list_permissions))]
             for i, item in enumerate(list_permissions):
                 if item.replace(" ", "") in apk_dict["Static_analysis"]["Permissions"]:
@@ -583,8 +580,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             rows_intents_services.append(list_intents_services_filled)
             rows_intents_receivers.append(list_intents_receivers_filled)
             rows_api_packages.append(list_api_packages_filled)
-
-
             list_rows.append(complete_row)
 
         list_permissions = ["PERMISSION-" + x for x in list(list_permissions)]
