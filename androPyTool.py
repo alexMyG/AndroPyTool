@@ -15,7 +15,6 @@ from APT_3_filter_bw_mw import filter_apks
 from APT_4_launch_flowdroid import run_flowdroid
 from APT_5_process_flowdroid_outputs import process_flowdroid_outputs
 from APT_6_feat_extraction import features_extractor
-
 from DroidBox_AndroPyTool.fork_droidbox import analyze_with_droidbox
 from DroidBox_AndroPyTool.droidboxOutputsManaging import parse_droidbox_outputs
 
