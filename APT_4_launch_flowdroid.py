@@ -13,14 +13,14 @@ working_directory = os.getcwd() + "/"
 
 kill = lambda process: process.kill()
 
-MAX_TIME_ANALYSIS = 30  # Minutes
+MAX_TIME_ANALYSIS = 5  # Minutes
 FLOWDROID_FOLDER = working_directory + "FlowDroid/"
 
 # FlowDroid authors recommend to use the official platforms downloaded from Google, not the ones from GitHub, for better
 # performance
 ANDROID_PLATFORMS_FOLDER = working_directory + 'FlowDroid/android-platforms/platforms'
 
-MAX_MEMORY = 20  # GIGABYTES
+MAX_MEMORY = 10  # GIGABYTES
 
 LIBRARIES_FLOWDROID = "soot-trunk.jar:soot-infoflow.jar:soot-infoflow-android.jar:slf4j-api-1.7.5.jar:slf4j-simple-" \
                       "1.7.5.jar:axml-2.0.jar"
