@@ -38,7 +38,9 @@ def print_message(message, with_color, color):
 
 
 def get_call_flowdroid(apk_path):
-    flowdroid_call_list = ["java",  # A list to later build a string space separated
+    flowdroid_call_list = ["timeout",
+                           str(MAX_TIME_ANALYSIS),
+                           "java",  # A list to later build a string space separated
                            "-Xmx" + str(MAX_MEMORY) + "g",
                            "-cp",
                            LIBRARIES_FLOWDROID,
@@ -106,7 +108,7 @@ def run_flowdroid(source_directory, output_folder, with_color=True):
 
         os.chdir(origen_wd)  # get back to our original working directory
 
-        timer = Timer(MAX_TIME_ANALYSIS * 60, kill, [process])
+        timer = Timer(MAX_TIME_ANALYSIS * 59, kill, [process])
         try:
             timer.start()
             stdout, stderr = process.communicate()
