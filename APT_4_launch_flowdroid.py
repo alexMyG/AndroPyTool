@@ -39,7 +39,7 @@ def print_message(message, with_color, color):
 
 def get_call_flowdroid(apk_path):
     flowdroid_call_list = ["timeout",
-                           str(MAX_TIME_ANALYSIS),
+                           str(MAX_TIME_ANALYSIS * 60),
                            "java",  # A list to later build a string space separated
                            "-Xmx" + str(MAX_MEMORY) + "g",
                            "-cp",
