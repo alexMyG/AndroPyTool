@@ -50,6 +50,9 @@ RUN cd /
 
 RUN cd /
 
+RUN cd /
+
+RUN cd /
 
 RUN pwd \
  && cd /root/ \
