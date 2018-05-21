@@ -228,13 +228,13 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         try:
             list_receivers = androguard_apk_object.get_receivers()
         except UnicodeEncodeError:
-            list_activities = []
+            list_receivers = []
 
         # Services
         try:
             list_services = androguard_apk_object.get_services()
         except UnicodeEncodeError:
-            list_activities = []
+            list_services = []
 
         # API calls and Strings
         list_smali_api_calls, list_smali_strings = read_strings_and_apicalls(analyze_apk, API_PACKAGES_LIST,
