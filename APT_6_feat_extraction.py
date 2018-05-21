@@ -216,7 +216,10 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         static_analysis_dict['Opcodes'] = opcodes_analysis(androguard_apk_object)
 
         # Activities
-        list_activities = androguard_apk_object.get_activities()
+        try:
+            list_activities = androguard_apk_object.get_activities()
+        except UnicodeEncodeError:
+            list_activities = []
 
         # Main activity
         static_analysis_dict['Main activity'] = androguard_apk_object.get_main_activity()
