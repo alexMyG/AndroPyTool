@@ -54,6 +54,11 @@ RUN cd /
 
 RUN cd /
 
+RUN cd /
+
+
+RUN cd /
+
 RUN pwd \
  && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
