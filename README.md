@@ -34,7 +34,7 @@ There are different arguments that can be provided to androPyTool:
 
 * `-h`: Show the help message and exit.
 * `-all`, `--allsteps`: Executes all steps of AndroPyTool (Recommended). In order to obtain a VirusTotal report, the argument -vt must be also provided followed by a VirusTotal API key. If the -all option is not provided, then only the last step is executed plus the provided arguments.
-* `-s SOURCE_FOLDER`, `--source SOURCE_FOLDER`: Executes all steps of AndroPyTool (Recommended). In order to obtain a VirusTotal report, the argument -vt must be also provided followed by a VirusTotal API key. If the -all option is not provided, then only the last step is executed plus the provided arguments.
+* `-s SOURCE_FOLDER`, `--source SOURCE_FOLDER`: Folder containing APKs to be analysed. All samples must include .apk extension. If a previous execution of AndroPyTool was interrupted, the previous working directory must me provided.
 * `-S`, `--single`: Save single analysis separately. Default: False.
 * `-f`, `--filter`: Filter valid and invalid APKs (Recommended).
 * `-vt VIRUSTOTAL_API_KEY`, `--virustotal VIRUSTOTAL_API_KEY`: Analyse applications with the VirusTotal service. It must be followed by a VirusTotal API key.
