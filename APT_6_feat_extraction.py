@@ -203,7 +203,11 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         else:
             pre_static_dict["Label"] = "/".join(apk_filename.split("/")[:-1])
 
-        androguard_apk_object = apk.APK(analyze_apk)
+
+        try:
+            androguard_apk_object = apk.APK(analyze_apk)
+        except Exception:
+            print "ERROR in APK: " + apk_name_no_extensions
 
         static_analysis_dict = collections.OrderedDict()
         # Package name
