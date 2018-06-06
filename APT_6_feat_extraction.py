@@ -208,6 +208,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             androguard_apk_object = apk.APK(analyze_apk)
         except Exception:
             print "ERROR in APK: " + apk_name_no_extensions
+            continue
 
         static_analysis_dict = collections.OrderedDict()
         # Package name
