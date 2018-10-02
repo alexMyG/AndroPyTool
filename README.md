@@ -149,6 +149,7 @@ The next steps will allow you to install Android SDK in Non-GUI mode:
 **INPUT:** A folder containing files with ".apk" extension.
 **OUTPUT:** An structure of folders following this scheme:
     **/**                      --> root folder
+    
     **/samples/**              --> samples, originally in the root folder
     **/samples/BW/**           --> benignware samples
     **/samples/MW/**           --> malware samples
