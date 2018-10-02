@@ -149,15 +149,15 @@ The next steps will allow you to install Android SDK in Non-GUI mode:
 **INPUT:** A folder containing files with ".apk" extension.
 **OUTPUT:** An structure of folders following this scheme:
 
-    **/**                      --> root folder
-    **/samples/**              --> samples, originally in the root folder
-    **/samples/BW/**           --> benignware samples
-    **/samples/MW/**           --> malware samples
-    **/invalid_apks/**         --> invalid apks found
-    **/VT_analysis/**          --> VirusTotal analysis reports
-    **/FlowDroid_outputs/**    --> flowdroid results
-    **/FlowDroid_processed/**  --> flowdroid results processed
-    **/DroidBox_outputs/**     --> DroidBox outputs raw
-    **/Dynamic/Droidbox/**     --> Droidbox analysis in JSON
-    **/Dynamic/Strace/**       --> Strace analysis in CSV
-    **/Features_files/**       --> Features files generated with AndroPyTool
+    /                      --> root folder
+    /samples/              --> samples, originally in the root folder
+    /samples/BW/**           --> benignware samples
+    /samples/MW/**           --> malware samples
+    /invalid_apks/**         --> invalid apks found
+    /VT_analysis/**          --> VirusTotal analysis reports
+    /FlowDroid_outputs/**    --> flowdroid results
+    /FlowDroid_processed/**  --> flowdroid results processed
+    /DroidBox_outputs/**     --> DroidBox outputs raw
+    /Dynamic/Droidbox/**     --> Droidbox analysis in JSON
+    /Dynamic/Strace/**       --> Strace analysis in CSV
+    /Features_files/**       --> Features files generated with AndroPyTool
