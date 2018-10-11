@@ -521,7 +521,8 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         if flowdroid_folder:
             apk_dict_example = database[database.keys()[0]]
             flowdroid_fields = apk_dict_example["Static_analysis"]["FlowDroid"].keys()
-            del flowdroid_fields[flowdroid_fields.index("Sources\\Sinks")]
+            if "Sources\\Sinks" in flowdroid_fields:
+                del flowdroid_fields[flowdroid_fields.index("Sources\\Sinks")]
         
         flowdroid_fields_matrix = [(x, y) for x in flowdroid_fields for y in flowdroid_fields]
 
