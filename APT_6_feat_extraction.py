@@ -460,7 +460,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     # EXPORTING TO CSV
     ############################################################
     if export_csv is not None:
-        print "WORKING DIR: " + str(os.path.dirname(os.path.realpath(__file__)))
         set_permissions = set()
         set_opcodes = set()
         set_apicalls = set()
@@ -588,7 +587,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                     list_intents_receivers_filled[i] = 1
 
             flowdroid_fields_matrix_filled = [0 for x in range(len(flowdroid_fields_matrix))]
-            flow_df = pd.read_csv("FlowDroid_processed/" + hash_app + ".csv")
+            flow_df = pd.read_csv(join_dir(flowdroid_folder, hash_app + ".csv"))
             flow_df = flow_df.set_index("Sources\Sinks")
             for i, item in enumerate(flowdroid_fields_matrix):
                 source, sink = item[0], item[1]
