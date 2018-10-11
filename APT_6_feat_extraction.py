@@ -472,9 +472,13 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         for apk_key in tqdm(database.keys()):
             apk_dict = database[apk_key]
-
-            kind = apk_key.split("/")[0]
-            hash_app = apk_key.split("/")[1]
+            
+            if len(apk_key.split("/")) > 1:
+                kind = apk_key.split("/")[0]
+                hash_app = apk_key.split("/")[1]
+            else:
+                kind = ""
+                hash_app = apk_key
 
             set_permissions.update(apk_dict["Static_analysis"]["Permissions"])
             set_opcodes.update(apk_dict["Static_analysis"]["Opcodes"])

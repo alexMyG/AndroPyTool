@@ -87,7 +87,7 @@ def main():
                         required=False)
 
     parser.add_argument('-cl', '--classify', help='Classify apps between malware or benignware based on the'
-                                                  'VirusTotal reports. --virustotal argument has to be set',
+                                                  'VirusTotal reports. --virustotal_api_key argument has to be set',
                         default=False, required=False, action='store_true')
 
     parser.add_argument('-fw', '--flowdroid', help='Run flowdroid.', default=False, required=False, action='store_true')
@@ -138,7 +138,7 @@ def main():
         step_run_droidbox = args.droidbox
 
     if step_analyse_virus_total is False and step_filter_bw_mw is True:
-        print "ERROR!: Option -cl --classify requires -vt --virustotal."
+        print "ERROR!: Option -cl --classify requires -vt --virustotal_api_key."
         sys.exit(0)
 
     execute_andro_py_tool_steps(source_folder=source_folder,
