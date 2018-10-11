@@ -460,7 +460,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     # EXPORTING TO CSV
     ############################################################
     if export_csv is not None:
-
+        print "WORKING DIR:  + str(os.path.dirname(os.path.realpath(__file__)))
         set_permissions = set()
         set_opcodes = set()
         set_apicalls = set()
