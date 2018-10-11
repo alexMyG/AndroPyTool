@@ -537,8 +537,8 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         rows_intents_receivers = []
         rows_api_packages = []
                 
-        for apk_key in tqdm(data.keys()):
-            apk_dict = data[apk_key]
+        for apk_key in tqdm(database.keys()):
+            apk_dict = database[apk_key]
             label = apk_key.split("/")[0]
             hash_app =apk_keyapk.split("/")[1]
             list_permissions_filled = [0 for x in range(len(list_permissions))]
