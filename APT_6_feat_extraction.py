@@ -622,7 +622,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                        list_systemcommands + list_intents_activities + list_intents_services + list_intents_receivers + \
                        list_api_packages + flowdroid_fields_matrix_strings
 
-        with open(export_csv, 'wb') as csv_file:
+        with open(output_folder + "/" +  export_csv, 'wb') as csv_file:
 
             csvwriter = csv.writer(csv_file, delimiter=",")
             csvwriter.writerow(complete_list_fields)
