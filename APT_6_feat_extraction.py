@@ -356,17 +356,17 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
             if isfile(join_dir(flowdroid_folder, apk_name_no_extensions + ".csv")):
                 flowdroid_file = join_dir(flowdroid_folder, apk_name_no_extensions + ".csv")
-        # static_analysis_dict['FlowDroid'] = flowdroid_field
+                # static_analysis_dict['FlowDroid'] = flowdroid_field
 
-        data_flowdroid_csv = pd.read_csv(flowdroid_file)
+                data_flowdroid_csv = pd.read_csv(flowdroid_file)
 
-        # Setting column names with the first column
-        data_flowdroid_csv.index = data_flowdroid_csv["Sources\\Sinks"]
-	if "Sources\\Sinks" in data_flowdroid_csv.columns:        
-		del data_flowdroid_csv["Sources\\Sinks"]
+                # Setting column names with the first column
+                data_flowdroid_csv.index = data_flowdroid_csv["Sources\\Sinks"]
+                if "Sources\\Sinks" in data_flowdroid_csv.columns:        
+                    del data_flowdroid_csv["Sources\\Sinks"]
 
-        flowdroid_field = data_flowdroid_csv.to_dict()
-        static_analysis_dict['FlowDroid'] = flowdroid_field
+                flowdroid_field = data_flowdroid_csv.to_dict()
+                static_analysis_dict['FlowDroid'] = flowdroid_field
 
         ############################################################
         # READING VIRUSTOTAL FILE TO INCLUDE IN JSON
