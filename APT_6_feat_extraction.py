@@ -170,7 +170,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         apk_filename = join_dir(base_folder, analyze_apk.replace(source_directory, ''))
         apk_filename = apk_filename.replace("//", "/")
 
-        apk_name_no_extensions = "".join(apk_filename.split("/")[-1].split(".")[:-1])
+        apk_name_no_extensions = ".".join(apk_filename.split("/")[-1].split(".")[:-1])
 
         if os.path.isfile(join_dir(output_folder, apk_filename.split("/")[-1].replace('.apk', '-analysis.json'))):
             database[apk_filename.replace('.apk', '')] = json.load(open(join_dir(output_folder, apk_filename.split("/")[-1].
