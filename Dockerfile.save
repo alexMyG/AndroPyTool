@@ -1,4 +1,6 @@
-# Alpine Linux with python 2.7 and Oracle Java 8
+
+
+	# Alpine Linux with python 2.7 and Oracle Java 8
 FROM ubuntu:artful
 
 # Installing Oracle JDK 8
@@ -51,10 +53,6 @@ RUN cd /root/
 RUN cd /root/
 
 RUN cd /
-
-RUN cd /root/
-
-RUN cd /root/
 
 RUN cd /root/
 

@@ -198,11 +198,13 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         pre_static_dict["sha256"] = sha256
         pre_static_dict["sha1"] = sha1
 
+        """
         if label is not None:
             pre_static_dict["Label"] = label
         else:
             pre_static_dict["Label"] = "/".join(apk_filename.split("/")[:-1])
-
+        """
+        pre_static_dict["VT_positives"] = None
 
         try:
             androguard_apk_object = apk.APK(analyze_apk)
@@ -378,8 +380,13 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             if isfile(vt_file_name):
                 load_vt_json = load_from_json(vt_file_name)
                 virus_total_dict = load_vt_json
+
+                # Saving number of antivirus engines from VirusTotal testing for positive in the pre static section
+                pre_static_dict["VT_positives"] = load_vt_json["positives"]
             else:
                 virus_total_dict = ""
+
+        
 
         ############################################################
         # GETTING AVCLASS LABEL IF VIRUSTOTAL ANALYSIS IS AVAILABLE
