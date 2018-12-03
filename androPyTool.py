@@ -158,8 +158,9 @@ def main():
                                 export_mongodb=args.mongodbURI,
                                 exportCSV=args.exportCSV,
                                 with_color=args.color,
-                                virus_total_api_key=step_analyse_virus_total,
-                                vt_threshold=args.virustotal_threshold)
+                                vt_threshold=args.virustotal_threshold,
+                                virus_total_api_key=step_analyse_virus_total
+                                )
 
 
 def print_message(message, with_color, color):
@@ -172,7 +173,7 @@ def print_message(message, with_color, color):
 def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_nocleanup,
                                 package_index, class_index, system_commands_index, export_mongodb, exportCSV,
-                                with_color, virus_total_api_key=None, vt_threshold):
+                                with_color, vt_threshold, virus_total_api_key=None):
 
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
