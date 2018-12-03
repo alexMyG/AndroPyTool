@@ -50,7 +50,7 @@ DYNAMIC_DROIDBOX_ANALYSIS = "Droidbox/"
 DYNAMIC_STRACE_ANALYSIS = "Strace/"
 FEATURES_FILES = "Features_files/"
 
-VIRUSTOTAL_THRESHOLD = 1
+# VIRUSTOTAL_THRESHOLD = 1
 OUTPUT_GLOBAL_FILE_FLOWDROID = "flowdroid_global.csv"
 DROIDBOX_ANALYSIS_DURATION = 300  # seconds
 DROIDBOX_GUI_MODE = False
@@ -84,6 +84,10 @@ def main():
 
     parser.add_argument('-vt', '--virustotal_api_key', help='Analyse applications with the VirusTotal service. '
                                                     'It must be followed by a VirusTotal API key.', default=None,
+                        required=False)
+
+    parser.add_argument('-threshold', '--virustotal_threshold', help='Minimum number of antivirus engines testing positive for malware '
+                                                        'necessary to consider a sample as malicious.', default=1,
                         required=False)
 
     parser.add_argument('-cl', '--classify', help='Classify apps between malware or benignware based on the'
@@ -154,7 +158,8 @@ def main():
                                 export_mongodb=args.mongodbURI,
                                 exportCSV=args.exportCSV,
                                 with_color=args.color,
-                                virus_total_api_key=step_analyse_virus_total)
+                                virus_total_api_key=step_analyse_virus_total,
+                                vt_threshold=args.virustotal_threshold)
 
 
 def print_message(message, with_color, color):
@@ -167,7 +172,7 @@ def print_message(message, with_color, color):
 def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_nocleanup,
                                 package_index, class_index, system_commands_index, export_mongodb, exportCSV,
-                                with_color, virus_total_api_key=None):
+                                with_color, virus_total_api_key=None, vt_threshold):
 
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
@@ -234,7 +239,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_
                     vt_analysis_directory=join_dir(source_folder, VIRUSTOTAL_FOLDER),
                     bw_directory_name=join_dir(source_folder, BW_DIRECTORY),
                     mw_directory_name=join_dir(source_folder, MW_DIRECTORY),
-                    threshold=VIRUSTOTAL_THRESHOLD)
+                    threshold=vt_threshold)
 
         sleep(1)
 
