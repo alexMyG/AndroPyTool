@@ -48,6 +48,7 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 
 RUN cd /root/
 
+RUN cd /root/
 
 RUN pwd \
  && cd /root/ \
