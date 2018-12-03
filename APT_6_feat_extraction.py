@@ -383,6 +383,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
                 # Saving number of antivirus engines from VirusTotal testing for positive in the pre static section
                 pre_static_dict["VT_positives"] = load_vt_json["positives"]
+                pre_static_dict["VT_engines"] = len(load_vt_json["scans"].keys())
             else:
                 virus_total_dict = ""
 
