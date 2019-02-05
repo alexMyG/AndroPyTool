@@ -2,6 +2,14 @@
 
 This is a tool for extracting static and dynamic features from Android APKs. It combines different well-known Android apps analysis tools such as DroidBox, FlowDroid, Strace, AndroGuard or VirusTotal analysis. Provided a source directory containing APK files, AndroPyTool applies all these tools to perform pre-static, static and dynamic analysis and generates files of features in JSON and CSV formats and also allows to save all the data in a MongoDB database.
 
+To obtain more information you can read the following two papers:
+
+- Martín, A., Lara-Cabrera, R., & Camacho, D. (2018). Android malware detection through hybrid features fusion and ensemble classifiers: the AndroPyTool framework and the OmniDroid dataset. Information Fusion.
+
+- Martín, A., Lara-Cabrera, R., & Camacho, D. (2018). A new tool for static and dynamic Android malware analysis. In Data Science and Knowledge Engineering for Sensing Decision Support (pp. 509-516). World Scientific.
+
+Please, if you use this tool, cite the above works in your papers.
+
 ![alt text](https://raw.githubusercontent.com/alexMyG/AndroPyTool/master/AndroPyTool.png)
 
 ### How to install
