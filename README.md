@@ -4,7 +4,7 @@ This is a tool for extracting static and dynamic features from Android APKs. It 
 
 To obtain more information you can read the following two papers:
 
-- Martín, A., Lara-Cabrera, R., & Camacho, D. (2018). Android malware detection through hybrid features fusion and ensemble classifiers: the AndroPyTool framework and the OmniDroid dataset. Information Fusion. https://doi.org/10.1016/j.inffus.2018.12.006
+- Martín, A., Lara-Cabrera, R., & Camacho, D. (2018). [Android malware detection through hybrid features fusion and ensemble classifiers: the AndroPyTool framework and the OmniDroid dataset.](https://www.researchgate.net/publication/329745168_Android_malware_detection_through_hybrid_features_fusion_and_ensemble_classifiers_the_AndroPyTool_framework_and_the_OmniDroid_dataset?_sg=YV6P1W_i0faZ9O-N9ZX304ZuP75Je8qHk5jvYW3jT-kEFaaY1uN9IkeIWRItR8eCgTAWp28TZqGngLStCSjUge2E6RkQ1cbejyPVMqlN.pDLH4lsRw1zTXkacv0O9DQH1k99crDqqV-qmERjUZH6bSMvQR9kGZekM-lFpDeH0n4zVwUF8oNkN819nQeo70w) Information Fusion. https://doi.org/10.1016/j.inffus.2018.12.006
 
 - Martín, A., Lara-Cabrera, R., & Camacho, D. (2018). A new tool for static and dynamic Android malware analysis. In Data Science and Knowledge Engineering for Sensing Decision Support (pp. 509-516). World Scientific.
 
