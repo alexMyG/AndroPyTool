@@ -52,6 +52,7 @@ RUN pwd
 
 RUN pwd
 
+RUN pwd
 
 RUN pwd \
  && cd /root/ \
