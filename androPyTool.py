@@ -52,7 +52,6 @@ FEATURES_FILES = "Features_files/"
 
 # VIRUSTOTAL_THRESHOLD = 1
 OUTPUT_GLOBAL_FILE_FLOWDROID = "flowdroid_global.csv"
-DROIDBOX_ANALYSIS_DURATION = 300  # seconds
 DROIDBOX_GUI_MODE = False
 
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
@@ -116,6 +115,8 @@ def main():
     parser.add_argument('-csv', '--exportCSV', help='Exports the report generated to a CSV file. Only static '
                                                     'features are included.')
 
+    parser.add_argument('-drt', '--droidbox_time', default=300, required=False, help='DroidBox running time in seconds. Default is 300s.')
+
     parser.add_argument('--color', dest='color', action='store_true')
     parser.add_argument('--no-color', dest='color', action='store_false')
     parser.set_defaults(color=True)
@@ -159,6 +160,7 @@ def main():
                                 exportCSV=args.exportCSV,
                                 with_color=args.color,
                                 vt_threshold=args.virustotal_threshold,
+                                droidbox_time=args.droidbox_time
                                 virus_total_api_key=step_analyse_virus_total
                                 )
 
@@ -173,7 +175,7 @@ def print_message(message, with_color, color):
 def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_nocleanup,
                                 package_index, class_index, system_commands_index, export_mongodb, exportCSV,
-                                with_color, vt_threshold, virus_total_api_key=None):
+                                with_color, vt_threshold, droidbox_time, virus_total_api_key=None):
 
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
@@ -280,7 +282,7 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_
         print_message("\n\n>>>> AndroPyTool -- STEP 6: Execute DroidBox\n", with_color, "green")
 
         analyze_with_droidbox(apks_folders=join_dir(source_folder, APKS_DIRECTORY),
-                              duration=DROIDBOX_ANALYSIS_DURATION,
+                              duration=droidbox_time,
                               output_directory=join_dir(source_folder, DROIDBOX_RESULTS_FOLDER),
                               gui=DROIDBOX_GUI_MODE)
 
