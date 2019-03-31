@@ -160,7 +160,7 @@ def main():
                                 exportCSV=args.exportCSV,
                                 with_color=args.color,
                                 vt_threshold=args.virustotal_threshold,
-                                droidbox_time=args.droidbox_time
+                                droidbox_time=args.droidbox_time,
                                 virus_total_api_key=step_analyse_virus_total
                                 )
 
