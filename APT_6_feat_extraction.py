@@ -423,7 +423,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                                                                   "-analysis.json"))
 
     with closing(Pool(4)) as p:
-        r = list(tqdm.tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
+        r = list(tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
         p.terminate()
     print"Saving database in json files ..."
     save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
