@@ -21,6 +21,7 @@ from argparse import RawTextHelpFormatter
 from androguard.core.bytecodes import apk
 from avclass_caller import get_avclass_label
 from multiprocessing import Pool
+from contextlib import closing
 
 
 ############################################################
