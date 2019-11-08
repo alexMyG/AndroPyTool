@@ -20,7 +20,8 @@ from os.path import join as join_dir
 from argparse import RawTextHelpFormatter
 from androguard.core.bytecodes import apk
 from avclass_caller import get_avclass_label
-from multiprocessing import Pool
+# from multiprocessing import Pool
+from pathos.multiprocessing import ProcessingPool as Pool
 from contextlib import closing
 
 
