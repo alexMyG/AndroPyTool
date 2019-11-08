@@ -49,16 +49,6 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERM=linux \
 	TERMINFO=/etc/terminfo
 
-RUN pwd
-
-RUN pwd
-
-RUN pwd
-
-RUN pwd
-
-RUN pwd
-
 
 RUN pwd \
 	&& cd /root/ \
@@ -69,7 +59,10 @@ RUN pwd \
 	&& pip install wheel \
 	&& pip install -r AndroPyTool/requirements.txt \
 	&& touch AndroPyTool/avclass/__init__.py \
-	&& chmod 744 /root/AndroPyTool/run_androPyTool.sh
+	&& chmod 744 /root/AndroPyTool/run_androPyTool.sh \
+	&& cd \
+	&& cd AndroPytool \
+	&& git pull
 
 
 # Preparing droidbox
