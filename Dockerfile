@@ -59,10 +59,7 @@ RUN pwd \
 	&& pip install wheel \
 	&& pip install -r AndroPyTool/requirements.txt \
 	&& touch AndroPyTool/avclass/__init__.py \
-	&& chmod 744 /root/AndroPyTool/run_androPyTool.sh \
-	&& cd \
-	&& cd AndroPytool \
-	&& git pull
+	&& chmod 744 /root/AndroPyTool/run_androPyTool.sh 
 
 
 # Preparing droidbox
