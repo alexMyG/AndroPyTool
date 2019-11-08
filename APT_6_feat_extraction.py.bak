@@ -20,7 +20,6 @@ from os.path import join as join_dir
 from argparse import RawTextHelpFormatter
 from androguard.core.bytecodes import apk
 from avclass_caller import get_avclass_label
-from multiprocessing import Pool
 
 
 ############################################################
@@ -162,11 +161,10 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     # ANALYSING APKS
     ############################################################
     database = collections.OrderedDict()
-    print"ANALYSING APKS..."
-    
-    def analyze_apk(analyze_apk):
-    # for analyze_apk in tqdm(apk_list):
-    # Getting the name of the folder that contains all apks and folders with apks
+    print "ANALYSING APKS..."
+    for analyze_apk in tqdm(apk_list):
+
+        # Getting the name of the folder that contains all apks and folders with apks
         base_folder = source_directory.split("/")[-1]
 
         apk_filename = join_dir(base_folder, analyze_apk.replace(source_directory, ''))
@@ -177,7 +175,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         if os.path.isfile(join_dir(output_folder, apk_filename.split("/")[-1].replace('.apk', '-analysis.json'))):
             database[apk_filename.replace('.apk', '')] = json.load(open(join_dir(output_folder, apk_filename.split("/")[-1].
                                                                             replace('.apk', '-analysis.json'))))
-            return
+            continue
 
         pre_static_dict = collections.OrderedDict()
 
@@ -212,7 +210,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             androguard_apk_object = apk.APK(analyze_apk)
         except Exception:
             print "ERROR in APK: " + apk_name_no_extensions
-            return
+            continue
 
         static_analysis_dict = collections.OrderedDict()
         # Package name
@@ -421,10 +419,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             save_as_json(apk_total_analysis, output_name=join_dir(output_folder, apk_name_no_extensions +
                                                                   "-analysis.json"))
 
-    with Pool(4) as p:
-        r = list(tqdm.tqdm(p.imap(analyze_apk, apk_list, total=len(apk_list))))
-        
-    print"Saving database in json files ..."
     save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
 
     ############################################################
