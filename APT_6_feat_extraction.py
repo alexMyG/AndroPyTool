@@ -435,8 +435,10 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     # EXPORTING TO MONGODB
     ############################################################
     if export_mongodb is not None:
-        print database
+        print "exporting to mongodb ..."
+        print database.keys()
         for apk_key in database.keys():
+            print database[apk_key]
             for call in database[apk_key]["Static_analysis"]["API calls"].keys():
                 database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API calls"][call]
