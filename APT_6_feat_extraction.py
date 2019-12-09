@@ -34,8 +34,9 @@ API_CLASSES_LIST = []
 API_SYSTEM_COMMANDS = []
 OUTPUT_FILE_GLOBAL_JSON = "OUTPUT_ANDROPY_" + TIME_EXECUTION + ".json"
 OUTPUT_FILE_GLOBAL_CSV = "OUTPUT_ANDROPY_" + TIME_EXECUTION + ".csv"
-
 POSSIBLE_DYNAMIC_FILES_EXTENSIONS = [".csv", ".json", ".txt"]
+database = collections.OrderedDict()
+
 ############################################################
 
 
@@ -165,13 +166,12 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     ############################################################
     # ANALYSING APKS
     ############################################################
-    client = MongoClient('mongodb://' + export_mongodb)
-    database = collections.OrderedDict()
     print"ANALYSING APKS..."
     
     def analyze_apk(analyze_apk):
     # for analyze_apk in tqdm(apk_list):
     # Getting the name of the folder that contains all apks and folders with apks
+        global database
 
         base_folder = source_directory.split("/")[-1]
 
@@ -416,51 +416,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         database[apk_filename.replace('.apk', '')] = apk_total_analysis
 
-            ############################################################
-        # EXPORTING TO MONGODB
-        ############################################################
-        if export_mongodb is not None:
-            print "exporting to mongodb ..."
-            for apk_key in database.keys():
-                for call in database[apk_key]["Static_analysis"]["API calls"].keys():
-                    database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
-                        database[apk_key]["Static_analysis"]["API calls"][call]
-                    del database[apk_key]["Static_analysis"]["API calls"][call]
-
-                for string in database[apk_key]["Static_analysis"]["Strings"].keys():
-                    database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-")] = \
-                        database[apk_key]["Static_analysis"]["Strings"][string]
-                    del database[apk_key]["Static_analysis"]["Strings"][string]
-
-                for activity in database[apk_key]["Static_analysis"]["Activities"].keys():
-                    database[apk_key]["Static_analysis"]["Activities"][activity.replace(".", "-")] = \
-                        database[apk_key]["Static_analysis"]["Activities"][activity]
-                    del database[apk_key]["Static_analysis"]["Activities"][activity]
-
-                for receiver in database[apk_key]["Static_analysis"]["Receivers"].keys():
-                    database[apk_key]["Static_analysis"]["Receivers"][receiver.replace(".", "-")] = \
-                        database[apk_key]["Static_analysis"]["Receivers"][receiver]
-                    del database[apk_key]["Static_analysis"]["Receivers"][receiver]
-
-                for intent in database[apk_key]["Static_analysis"]["Intents"].keys():
-                    database[apk_key]["Static_analysis"]["Intents"][intent.replace(".", "-")] = \
-                        database[apk_key]["Static_analysis"]["Intents"][intent]
-                    del database[apk_key]["Static_analysis"]["Intents"][intent]
-
-                for package in database[apk_key]["Static_analysis"]["API packages"].keys():
-                    database[apk_key]["Static_analysis"]["API packages"][package.replace(".", "-")] = \
-                        database[apk_key]["Static_analysis"]["API packages"][package]
-                    del database[apk_key]["Static_analysis"]["API packages"][package]
-
-            
-            # Creating database
-            db = client['AndroPyTool_database']
-
-            coll = db[apk_filename.replace('.apk', '')]
-
-            coll.insert_one(apk_total_analysis).inserted_id
-
-
         ############################################################
         # SAVING ANALYSIS FOR INDIVIDUAL APK WHEN SELECTED
         ############################################################
@@ -475,10 +430,53 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     with closing(Pool(int(n_jobs))) as p:
         r = list(tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
         p.terminate()
-    print "Saving database in json files ..."
     save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
+    print database.keys()
 
-    
+    ############################################################
+    # EXPORTING TO MONGODB
+    ############################################################
+    if export_mongodb is not None:
+        for apk_key in database.keys():
+            print database[apk_key]
+            for call in database[apk_key]["Static_analysis"]["API calls"].keys():
+                database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["API calls"][call]
+                del database[apk_key]["Static_analysis"]["API calls"][call]
+
+            for string in database[apk_key]["Static_analysis"]["Strings"].keys():
+                database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["Strings"][string]
+                del database[apk_key]["Static_analysis"]["Strings"][string]
+
+            for activity in database[apk_key]["Static_analysis"]["Activities"].keys():
+                database[apk_key]["Static_analysis"]["Activities"][activity.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["Activities"][activity]
+                del database[apk_key]["Static_analysis"]["Activities"][activity]
+
+            for receiver in database[apk_key]["Static_analysis"]["Receivers"].keys():
+                database[apk_key]["Static_analysis"]["Receivers"][receiver.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["Receivers"][receiver]
+                del database[apk_key]["Static_analysis"]["Receivers"][receiver]
+
+            for intent in database[apk_key]["Static_analysis"]["Intents"].keys():
+                database[apk_key]["Static_analysis"]["Intents"][intent.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["Intents"][intent]
+                del database[apk_key]["Static_analysis"]["Intents"][intent]
+
+            for package in database[apk_key]["Static_analysis"]["API packages"].keys():
+                database[apk_key]["Static_analysis"]["API packages"][package.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["API packages"][package]
+                del database[apk_key]["Static_analysis"]["API packages"][package]
+
+        client = MongoClient('mongodb://' + export_mongodb)
+        # Creating database
+        db = client['AndroPyTool_database']
+
+        coll = db['report_' + TIME_EXECUTION]
+
+        coll.insert_one(database).inserted_id
+
     ############################################################
     # EXPORTING TO CSV
     ############################################################
