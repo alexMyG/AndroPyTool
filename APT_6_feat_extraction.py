@@ -171,6 +171,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     def analyze_apk(analyze_apk):
     # for analyze_apk in tqdm(apk_list):
     # Getting the name of the folder that contains all apks and folders with apks
+
         base_folder = source_directory.split("/")[-1]
 
         apk_filename = join_dir(base_folder, analyze_apk.replace(source_directory, ''))
@@ -415,23 +416,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         database[apk_filename.replace('.apk', '')] = apk_total_analysis
 
         ############################################################
-        # SAVING ANALYSIS FOR INDIVIDUAL APK WHEN SELECTED
-        ############################################################
-        if single_analysis:
-            # save_single_analysis(join_dir(output_folder, apk_filename.split("/")[-1].
-            # replace('.apk', '-analysis.json')),
-            #                     apk_total_analysis)
-
-            save_as_json(apk_total_analysis, output_name=join_dir(output_folder, apk_name_no_extensions +
-                                                                  "-analysis.json"))
-
-    with closing(Pool(int(n_jobs))) as p:
-        r = list(tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
-        p.terminate()
-    print"Saving database in json files ..."
-    save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
-
-    ############################################################
     # EXPORTING TO MONGODB
     ############################################################
     if export_mongodb is not None:
@@ -477,6 +461,26 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         coll.insert_one(database).inserted_id
 
+
+        ############################################################
+        # SAVING ANALYSIS FOR INDIVIDUAL APK WHEN SELECTED
+        ############################################################
+        if single_analysis:
+            # save_single_analysis(join_dir(output_folder, apk_filename.split("/")[-1].
+            # replace('.apk', '-analysis.json')),
+            #                     apk_total_analysis)
+
+            save_as_json(apk_total_analysis, output_name=join_dir(output_folder, apk_name_no_extensions +
+                                                                  "-analysis.json"))
+
+    with closing(Pool(int(n_jobs))) as p:
+        r = list(tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
+        p.terminate()
+    print "Saving database in json files ..."
+    print database.keys()
+    save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
+
+    
     ############################################################
     # EXPORTING TO CSV
     ############################################################
