@@ -93,6 +93,8 @@ def main():
     parser.add_argument('-csv', '--exportCSV', help='Exports the report generated to a CSV file. Only static '
                                                     'features are included.')
 
+    parser.add_argument('-j','--n_jobs', default=1)                                            
+
     args = parser.parse_args()
 
     features_extractor(apks_directory=args.source, single_analysis=args.Single,
@@ -100,7 +102,7 @@ def main():
                        virus_total_reports_folder=args.VirusTotal, output_folder=args.output,
                        noclean_up=args.nocleanup, flowdroid_folder=args.FlowDroid, package_index_file=args.Package,
                        classes_index_file=args.Class, system_commands_file=args.SystemC, label=args.label,
-                       avclass=args.AVClass, export_mongodb=args.mongodbURI, export_csv=args.exportCSV)
+                       avclass=args.AVClass, export_mongodb=args.mongodbURI, export_csv=args.exportCSV, n_jobs=args.n_jobs)
 
 
 ############################################################
@@ -111,7 +113,7 @@ def main():
 ############################################################
 def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder, virus_total_reports_folder,
                        flowdroid_folder, output_folder, noclean_up, package_index_file, classes_index_file,
-                       system_commands_file, label, avclass, export_mongodb, export_csv):
+                       system_commands_file, label, avclass, export_mongodb, export_csv, n_jobs):
     """
     Extracts features from a set of samples
 
@@ -423,7 +425,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             save_as_json(apk_total_analysis, output_name=join_dir(output_folder, apk_name_no_extensions +
                                                                   "-analysis.json"))
 
-    with closing(Pool(4)) as p:
+    with closing(Pool(ar)) as p:
         r = list(tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
         p.terminate()
     print"Saving database in json files ..."
