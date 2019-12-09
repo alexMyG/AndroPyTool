@@ -117,6 +117,8 @@ def main():
 
     parser.add_argument('-drt', '--droidbox_time', default=300, required=False, help='DroidBox running time in seconds. Default is 300s.')
 
+    parser.add_argument('-j', '--n_jobs', default=1)
+    
     parser.add_argument('--color', dest='color', action='store_true')
     parser.add_argument('--no-color', dest='color', action='store_false')
     parser.set_defaults(color=True)
@@ -161,7 +163,8 @@ def main():
                                 with_color=args.color,
                                 vt_threshold=args.virustotal_threshold,
                                 droidbox_time=args.droidbox_time,
-                                virus_total_api_key=step_analyse_virus_total
+                                virus_total_api_key=step_analyse_virus_total,
+                                n_jobs=args.n_jobs
                                 )
 
 
@@ -175,7 +178,7 @@ def print_message(message, with_color, color):
 def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_mw,
                                 step_run_flowdroid, step_run_droidbox, save_single_analysis, perform_nocleanup,
                                 package_index, class_index, system_commands_index, export_mongodb, exportCSV,
-                                with_color, vt_threshold, droidbox_time, virus_total_api_key=None):
+                                with_color, vt_threshold, droidbox_time, virus_total_api_key=None, n_jobs=1):
 
     """
     This method is used to launch all the different modules implemented in AndroPyTool.
@@ -313,7 +316,8 @@ def execute_andro_py_tool_steps(source_folder, step_filter_apks, step_filter_bw_
                        label=None,
                        avclass=True,
                        export_mongodb=export_mongodb,
-                       export_csv=exportCSV)
+                       export_csv=exportCSV,
+                       n_jobs=n_jobs)
 
 
 if __name__ == '__main__':
