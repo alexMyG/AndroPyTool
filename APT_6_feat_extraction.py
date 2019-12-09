@@ -165,6 +165,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     ############################################################
     # ANALYSING APKS
     ############################################################
+    client = MongoClient('mongodb://' + export_mongodb)
     database = collections.OrderedDict()
     print"ANALYSING APKS..."
     
@@ -420,9 +421,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         ############################################################
         if export_mongodb is not None:
             print "exporting to mongodb ..."
-            print database.keys()
             for apk_key in database.keys():
-                print database[apk_key]
                 for call in database[apk_key]["Static_analysis"]["API calls"].keys():
                     database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
                         database[apk_key]["Static_analysis"]["API calls"][call]
@@ -453,11 +452,13 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                         database[apk_key]["Static_analysis"]["API packages"][package]
                     del database[apk_key]["Static_analysis"]["API packages"][package]
 
-            client = MongoClient('mongodb://' + export_mongodb)
+            
             # Creating database
             db = client['AndroPyTool_database']
 
-            db.insert_one(database).inserted_id
+            coll = db[apk_filename.replace('.apk', '')]
+
+            coll.insert_one(apk_total_analysis).inserted_id
 
 
         ############################################################
@@ -475,7 +476,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         r = list(tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
         p.terminate()
     print "Saving database in json files ..."
-    print database.keys()
     save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
 
     
