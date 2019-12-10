@@ -406,7 +406,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                                           ("Dynamic_analysis", dynamic_analysis_dict),
                                           ("VirusTotal", virus_total_dict)])
 
-        database[apk_filename.replace('.apk', '')] = apk_total_analysis
+        database[apk_filename.replace('.apk', '').replace('.', '-')] = apk_total_analysis
 
         ############################################################
         # SAVING ANALYSIS FOR INDIVIDUAL APK WHEN SELECTED
@@ -427,11 +427,14 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     if export_mongodb is not None:
         for apk_key in database.keys():
             
-            database[apk_key]["Static_analysis"]["Package name"].replace(".", "-")
+            # database[apk_key]["Static_analysis"]["Package name"] = \
+            #      database[apk_key]["Static_analysis"]["Package name"].replace(".", "-")
         
-            database[apk_key]["Pre_static_analysis"]["Filename"].replace(".", "-")
+            # database[apk_key]["Pre_static_analysis"]["Filename"] = \
+            #     database[apk_key]["Pre_static_analysis"]["Filename"].replace(".", "-")
 
-            database[apk_key]["Static_analysis"]["Main activity"].replace(".", "-")
+            # database[apk_key]["Static_analysis"]["Main activity"] = \
+            #     database[apk_key]["Static_analysis"]["Main activity"].replace(".", "-")
 
             for call in database[apk_key]["Static_analysis"]["API calls"].keys():
                 database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
