@@ -431,6 +431,8 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         
             database[apk_key]["Pre_static_analysis"]["Filename"].replace(".", "-")
 
+            database[apk_key]["Static_analysis"]["Main activity"].replace(".", "-")
+
             for call in database[apk_key]["Static_analysis"]["API calls"].keys():
                 database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API calls"][call]
