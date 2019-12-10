@@ -462,6 +462,11 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 database[apk_key]["Static_analysis"]["API packages"][package.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API packages"][package]
                 del database[apk_key]["Static_analysis"]["API packages"][package]
+            
+            for service in database[apk_key]["Static_analysis"]["Services"].keys():
+                database[apk_key]["Static_analysis"]["Services"][service.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["Services"][service]
+                del database[apk_key]["Static_analysis"]["Services"][service]
 
         client = MongoClient('mongodb://' + export_mongodb)
         # Creating database
