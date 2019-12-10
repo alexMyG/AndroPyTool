@@ -426,21 +426,16 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     ############################################################
     if export_mongodb is not None:
         for apk_key in database.keys():
+            
+            database[apk_key]["Static_analysis"]["Package name"].replace(".", "-")
+        
+            database[apk_key]["Pre_static_analysis"]["Filename"].replace(".", "-")
+
             for call in database[apk_key]["Static_analysis"]["API calls"].keys():
                 database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API calls"][call]
                 del database[apk_key]["Static_analysis"]["API calls"][call]
             
-            for package in database[apk_key]["Static_analysis"]["Package name"].keys():
-                database[apk_key]["Static_analysis"]["Package name"][package.replace(".", "-")] = \
-                    database[apk_key]["Static_analysis"]["Package name"][package]
-                del database[apk_key]["Static_analysis"]["Package name"][package]
-            
-            for filename in database[apk_key]["Pre_static_analysis"]["Filename"].keys():
-                database[apk_key]["Pre_static_analysis"]["Filename"][filename.replace(".", "-")] = \
-                    database[apk_key]["Pre_static_analysis"]["Filename"][filename]
-                del database[apk_key]["Pre_static_analysis"]["Filename"][filename]
-
             for string in database[apk_key]["Static_analysis"]["Strings"].keys():
                 database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["Strings"][string]
