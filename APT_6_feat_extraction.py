@@ -430,6 +430,16 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API calls"][call]
                 del database[apk_key]["Static_analysis"]["API calls"][call]
+            
+            for package in database[apk_key]["Static_analysis"]["Package Name"].keys():
+                database[apk_key]["Static_analysis"]["Package Name"][package.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["Package Name"][package]
+                del database[apk_key]["Static_analysis"]["Package Name"][package]
+            
+            for filename in database[apk_key]["Pre_static_analysis"]["Filename"].keys():
+                database[apk_key]["Pre_static_analysis"]["Filename"][filename.replace(".", "-")] = \
+                    database[apk_key]["Pre_static_analysis"]["Filename"][filename]
+                del database[apk_key]["Pre_static_analysis"]["Filename"][filename]
 
             for string in database[apk_key]["Static_analysis"]["Strings"].keys():
                 database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-")] = \
