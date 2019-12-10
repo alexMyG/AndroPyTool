@@ -20,9 +20,6 @@ from os.path import join as join_dir
 from argparse import RawTextHelpFormatter
 from androguard.core.bytecodes import apk
 from avclass_caller import get_avclass_label
-# from multiprocessing import Pool
-from pathos.multiprocessing import ProcessingPool as Pool
-from contextlib import closing
 
 
 ############################################################
@@ -34,9 +31,8 @@ API_CLASSES_LIST = []
 API_SYSTEM_COMMANDS = []
 OUTPUT_FILE_GLOBAL_JSON = "OUTPUT_ANDROPY_" + TIME_EXECUTION + ".json"
 OUTPUT_FILE_GLOBAL_CSV = "OUTPUT_ANDROPY_" + TIME_EXECUTION + ".csv"
-POSSIBLE_DYNAMIC_FILES_EXTENSIONS = [".csv", ".json", ".txt"]
-database = collections.OrderedDict()
 
+POSSIBLE_DYNAMIC_FILES_EXTENSIONS = [".csv", ".json", ".txt"]
 ############################################################
 
 
@@ -94,8 +90,6 @@ def main():
     parser.add_argument('-csv', '--exportCSV', help='Exports the report generated to a CSV file. Only static '
                                                     'features are included.')
 
-    parser.add_argument('-j','--n_jobs', default=1)                                            
-
     args = parser.parse_args()
 
     features_extractor(apks_directory=args.source, single_analysis=args.Single,
@@ -103,7 +97,7 @@ def main():
                        virus_total_reports_folder=args.VirusTotal, output_folder=args.output,
                        noclean_up=args.nocleanup, flowdroid_folder=args.FlowDroid, package_index_file=args.Package,
                        classes_index_file=args.Class, system_commands_file=args.SystemC, label=args.label,
-                       avclass=args.AVClass, export_mongodb=args.mongodbURI, export_csv=args.exportCSV, n_jobs=args.n_jobs)
+                       avclass=args.AVClass, export_mongodb=args.mongodbURI, export_csv=args.exportCSV)
 
 
 ############################################################
@@ -114,7 +108,7 @@ def main():
 ############################################################
 def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder, virus_total_reports_folder,
                        flowdroid_folder, output_folder, noclean_up, package_index_file, classes_index_file,
-                       system_commands_file, label, avclass, export_mongodb, export_csv, n_jobs):
+                       system_commands_file, label, avclass, export_mongodb, export_csv):
     """
     Extracts features from a set of samples
 
@@ -166,13 +160,11 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     ############################################################
     # ANALYSING APKS
     ############################################################
-    print"ANALYSING APKS..."
-    
-    def analyze_apk(analyze_apk):
-    # for analyze_apk in tqdm(apk_list):
-    # Getting the name of the folder that contains all apks and folders with apks
-        global database
+    database = collections.OrderedDict()
+    print "ANALYSING APKS..."
+    for analyze_apk in tqdm(apk_list):
 
+        # Getting the name of the folder that contains all apks and folders with apks
         base_folder = source_directory.split("/")[-1]
 
         apk_filename = join_dir(base_folder, analyze_apk.replace(source_directory, ''))
@@ -183,7 +175,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         if os.path.isfile(join_dir(output_folder, apk_filename.split("/")[-1].replace('.apk', '-analysis.json'))):
             database[apk_filename.replace('.apk', '')] = json.load(open(join_dir(output_folder, apk_filename.split("/")[-1].
                                                                             replace('.apk', '-analysis.json'))))
-            return
+            continue
 
         pre_static_dict = collections.OrderedDict()
 
@@ -218,7 +210,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             androguard_apk_object = apk.APK(analyze_apk)
         except Exception:
             print "ERROR in APK: " + apk_name_no_extensions
-            return
+            continue
 
         static_analysis_dict = collections.OrderedDict()
         # Package name
@@ -427,9 +419,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             save_as_json(apk_total_analysis, output_name=join_dir(output_folder, apk_name_no_extensions +
                                                                   "-analysis.json"))
 
-    with closing(Pool(int(n_jobs))) as p:
-        r = list(tqdm(p.imap(analyze_apk, apk_list), total=len(apk_list)))
-        p.terminate()
     save_as_json(database, output_name=join_dir(output_folder, OUTPUT_FILE_GLOBAL_JSON))
 
     ############################################################
@@ -437,7 +426,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     ############################################################
     if export_mongodb is not None:
         for apk_key in database.keys():
-            print database[apk_key]
             for call in database[apk_key]["Static_analysis"]["API calls"].keys():
                 database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API calls"][call]
