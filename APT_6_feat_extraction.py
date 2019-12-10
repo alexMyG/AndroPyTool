@@ -433,7 +433,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 del database[apk_key]["Static_analysis"]["API calls"][call]
             
             for string in database[apk_key]["Static_analysis"]["Strings"].keys():
-                database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-")] = \
+                database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-").replace("$", "U+FF04")] = \
                     database[apk_key]["Static_analysis"]["Strings"][string]
                 del database[apk_key]["Static_analysis"]["Strings"][string]
 
