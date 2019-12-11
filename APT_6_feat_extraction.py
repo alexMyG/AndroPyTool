@@ -528,16 +528,6 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             list_apicalls[i] = ".".join(apicall.encode('ascii', 'ignore').split(".")[:-1])
 
         list_apicalls = list(set(list_apicalls))
-        
-
-        flowdroid_fields = []
-        if flowdroid_folder:
-            apk_dict_example = database[database.keys()[0]]
-            flowdroid_fields = apk_dict_example["Static_analysis"]["FlowDroid"].keys()
-            if "Sources\\Sinks" in flowdroid_fields:
-                del flowdroid_fields[flowdroid_fields.index("Sources\\Sinks")]
-        
-        flowdroid_fields_matrix = [(x, y) for x in flowdroid_fields for y in flowdroid_fields]
 
         list_rows = []
 
@@ -600,16 +590,9 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 if item in apk_dict["Static_analysis"]["API packages"]:
                     list_intents_receivers_filled[i] = 1
 
-            flowdroid_fields_matrix_filled = [0 for x in range(len(flowdroid_fields_matrix))]
-            flow_df = pd.read_csv(join_dir(flowdroid_folder, hash_app + ".csv"))
-            flow_df = flow_df.set_index("Sources\Sinks")
-            for i, item in enumerate(flowdroid_fields_matrix):
-                source, sink = item[0], item[1]
-                flowdroid_fields_matrix_filled[i] = flow_df[source][sink]
             complete_row = [label] + list_permissions_filled + list_opcodes_filled + list_apicalls_filled + \
                         list_systemcommands_filled + list_intents_activities_filled + \
-                        list_intents_services_filled + list_intents_receivers_filled + list_api_packages_filled + \
-                        flowdroid_fields_matrix_filled
+                        list_intents_services_filled + list_intents_receivers_filled + list_api_packages_filled
 
             rows_permissions.append(list_permissions_filled)
             rows_opcodes.append(list_opcodes_filled)
@@ -630,12 +613,10 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         list_intents_receivers = ["RECEIVER-" + x for x in list(list_intents_receivers)]
         list_api_packages = ["APIPACKAGE-" + x for x in list(list_api_packages)]
 
-        flowdroid_fields_matrix_strings = ["FLOWDROID-" + x[0] + "-" + x[1] for x in flowdroid_fields_matrix]
-
         complete_list_fields = ["label"] + list_permissions + list_opcodes + list_apicalls + \
                        list_systemcommands + list_intents_activities + list_intents_services + list_intents_receivers + \
-                       list_api_packages + flowdroid_fields_matrix_strings
-
+                       list_api_packages
+                       
         with open(output_folder + "/" +  export_csv, 'wb') as csv_file:
 
             csvwriter = csv.writer(csv_file, delimiter=",")
