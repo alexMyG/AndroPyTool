@@ -589,7 +589,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             print list_api_packages
             for i, item in enumerate(list_api_packages):
                 if item in apk_dict["Static_analysis"]["API packages"]:
-                    list_intents_receivers_filled[i] = 1
+                    list_intents_api_filled[i] = 1
 
             complete_row = [label] + list_permissions_filled + list_opcodes_filled + list_apicalls_filled + \
                         list_systemcommands_filled + list_intents_activities_filled + \
