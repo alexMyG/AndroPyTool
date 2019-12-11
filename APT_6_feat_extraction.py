@@ -474,6 +474,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     # EXPORTING TO CSV
     ############################################################
     if export_csv is not None:
+        
         set_permissions = set()
         set_opcodes = set()
         set_apicalls = set()
@@ -591,7 +592,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 if item in apk_dict["Static_analysis"]["API packages"]:
                     list_api_packages_filled[i] = 1
 
-            complete_row = [label] + list_permissions_filled + list_opcodes_filled + list_apicalls_filled + \
+            complete_row = [apk_dict["Pre_static_analysis"]["Filename"]] + [label] + list_permissions_filled + list_opcodes_filled + list_apicalls_filled + \
                         list_systemcommands_filled + list_intents_activities_filled + \
                         list_intents_services_filled + list_intents_receivers_filled + list_api_packages_filled
 
@@ -614,7 +615,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         list_intents_receivers = ["RECEIVER-" + x for x in list(list_intents_receivers)]
         list_api_packages = ["APIPACKAGE-" + x for x in list(list_api_packages)]
 
-        complete_list_fields = ["label"] + list_permissions + list_opcodes + list_apicalls + \
+        complete_list_fields = ["File_name"] + ["label"] + list_permissions + list_opcodes + list_apicalls + \
                        list_systemcommands + list_intents_activities + list_intents_services + list_intents_receivers + \
                        list_api_packages
 
