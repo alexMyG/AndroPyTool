@@ -20,12 +20,13 @@ from os.path import join as join_dir
 from argparse import RawTextHelpFormatter
 from androguard.core.bytecodes import apk
 from avclass_caller import get_avclass_label
+from datetime import datetime as dt
 
 
 ############################################################
 # VARIABLES
 ############################################################
-TIME_EXECUTION = str(time.time())
+TIME_EXECUTION = str(time.time()).replace('.','-')
 API_PACKAGES_LIST = []
 API_CLASSES_LIST = []
 API_SYSTEM_COMMANDS = []
@@ -436,7 +437,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-").replace("$", "U+FF04")] = \
                     database[apk_key]["Static_analysis"]["Strings"][string]
                 del database[apk_key]["Static_analysis"]["Strings"][string]
-
+                
             for activity in database[apk_key]["Static_analysis"]["Activities"].keys():
                 database[apk_key]["Static_analysis"]["Activities"][activity.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["Activities"][activity]
