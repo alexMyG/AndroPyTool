@@ -468,7 +468,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                     database[apk_key]["Static_analysis"]["Services"][service]
                 del database[apk_key]["Static_analysis"]["Services"][service]
 
-            coll.insert_one(database[apk_key]).inserted_id
+            coll.insert_one(database[apk_key]["Static_analysis"]).inserted_id
 
     ############################################################
     # EXPORTING TO CSV
