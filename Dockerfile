@@ -58,8 +58,8 @@ RUN pwd \
 	&& cp -r DroidBox_4.1.1/images AndroPyTool/DroidBox_AndroPyTool/images \
 	&& pip install wheel \
 	&& pip install -r AndroPyTool/requirements.txt \
-	&& pip install dill \
-	&& pip install pathos \
+	# && pip install dill \
+	# && pip install pathos \
 	&& touch AndroPyTool/avclass/__init__.py \
 	&& chmod 744 /root/AndroPyTool/run_androPyTool.sh 
 
