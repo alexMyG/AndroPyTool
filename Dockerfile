@@ -64,13 +64,13 @@ RUN pwd \
 	&& chmod 744 /root/AndroPyTool/run_androPyTool.sh 
 
 
-# Preparing droidbox
-RUN pwd \
-	&& cd /root/ \
-	&& chmod 744 AndroPyTool/DroidBox_AndroPyTool/*.sh \
-	&& echo "no" | ./AndroPyTool/DroidBox_AndroPyTool/createDroidBoxDevice.sh
+# # Preparing droidbox
+# RUN pwd \
+# 	&& cd /root/ \
+# 	&& chmod 744 AndroPyTool/DroidBox_AndroPyTool/*.sh \
+# 	&& echo "no" | ./AndroPyTool/DroidBox_AndroPyTool/createDroidBoxDevice.sh
 
-RUN adb devices; exit 0
+# RUN adb devices; exit 0
 
 VOLUME /apks
 

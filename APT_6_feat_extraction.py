@@ -586,6 +586,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                     list_intents_receivers_filled[i] = 1
 
             list_api_packages_filled = [0 for x in range(len(list_api_packages))]
+            print list_api_packages
             for i, item in enumerate(list_api_packages):
                 if item in apk_dict["Static_analysis"]["API packages"]:
                     list_intents_receivers_filled[i] = 1
@@ -616,7 +617,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         complete_list_fields = ["label"] + list_permissions + list_opcodes + list_apicalls + \
                        list_systemcommands + list_intents_activities + list_intents_services + list_intents_receivers + \
                        list_api_packages
-                       
+
         with open(output_folder + "/" +  export_csv, 'wb') as csv_file:
 
             csvwriter = csv.writer(csv_file, delimiter=",")
