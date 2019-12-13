@@ -1,6 +1,9 @@
 my_env/
 .vscode
 
+# mongodb
+mongo_db/
+
 andropytool_env/
 droidbox_env/
 .idea/

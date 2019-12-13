@@ -20,13 +20,12 @@ from os.path import join as join_dir
 from argparse import RawTextHelpFormatter
 from androguard.core.bytecodes import apk
 from avclass_caller import get_avclass_label
-from datetime import datetime as dt
 
 
 ############################################################
 # VARIABLES
 ############################################################
-TIME_EXECUTION = str(time.time()).replace('.','-')
+TIME_EXECUTION = str(time.time())
 API_PACKAGES_LIST = []
 API_CLASSES_LIST = []
 API_SYSTEM_COMMANDS = []
@@ -407,7 +406,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                                           ("Dynamic_analysis", dynamic_analysis_dict),
                                           ("VirusTotal", virus_total_dict)])
 
-        database[apk_filename.replace('.apk', '').replace('.', '-')] = apk_total_analysis
+        database[apk_filename.replace('.apk', '')] = apk_total_analysis
 
         ############################################################
         # SAVING ANALYSIS FOR INDIVIDUAL APK WHEN SELECTED
@@ -426,23 +425,17 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
     # EXPORTING TO MONGODB
     ############################################################
     if export_mongodb is not None:
-        client = MongoClient('mongodb://' + export_mongodb)
-        # Creating database
-        db = client['AndroPyTool_database']
-        coll = db['report_' + TIME_EXECUTION]
-
         for apk_key in database.keys():
-            
             for call in database[apk_key]["Static_analysis"]["API calls"].keys():
                 database[apk_key]["Static_analysis"]["API calls"][call.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API calls"][call]
                 del database[apk_key]["Static_analysis"]["API calls"][call]
-            
+
             for string in database[apk_key]["Static_analysis"]["Strings"].keys():
-                database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-").replace("$", "U+FF04")] = \
+                database[apk_key]["Static_analysis"]["Strings"][string.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["Strings"][string]
                 del database[apk_key]["Static_analysis"]["Strings"][string]
-                
+
             for activity in database[apk_key]["Static_analysis"]["Activities"].keys():
                 database[apk_key]["Static_analysis"]["Activities"][activity.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["Activities"][activity]
@@ -462,19 +455,19 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 database[apk_key]["Static_analysis"]["API packages"][package.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API packages"][package]
                 del database[apk_key]["Static_analysis"]["API packages"][package]
-            
-            for service in database[apk_key]["Static_analysis"]["Services"].keys():
-                database[apk_key]["Static_analysis"]["Services"][service.replace(".", "-")] = \
-                    database[apk_key]["Static_analysis"]["Services"][service]
-                del database[apk_key]["Static_analysis"]["Services"][service]
 
-            coll.insert_one(database[apk_key]["Static_analysis"]).inserted_id
+        client = MongoClient('mongodb://' + export_mongodb)
+        # Creating database
+        db = client['AndroPyTool_database']
+
+        coll = db['report_' + TIME_EXECUTION]
+
+        coll.insert_one(database).inserted_id
 
     ############################################################
     # EXPORTING TO CSV
     ############################################################
     if export_csv is not None:
-        
         set_permissions = set()
         set_opcodes = set()
         set_apicalls = set()
@@ -529,6 +522,16 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             list_apicalls[i] = ".".join(apicall.encode('ascii', 'ignore').split(".")[:-1])
 
         list_apicalls = list(set(list_apicalls))
+        
+
+        flowdroid_fields = []
+        if flowdroid_folder:
+            apk_dict_example = database[database.keys()[0]]
+            flowdroid_fields = apk_dict_example["Static_analysis"]["FlowDroid"].keys()
+            if "Sources\\Sinks" in flowdroid_fields:
+                del flowdroid_fields[flowdroid_fields.index("Sources\\Sinks")]
+        
+        flowdroid_fields_matrix = [(x, y) for x in flowdroid_fields for y in flowdroid_fields]
 
         list_rows = []
 
@@ -587,14 +590,20 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                     list_intents_receivers_filled[i] = 1
 
             list_api_packages_filled = [0 for x in range(len(list_api_packages))]
-            print list_api_packages
             for i, item in enumerate(list_api_packages):
                 if item in apk_dict["Static_analysis"]["API packages"]:
-                    list_api_packages_filled[i] = 1
+                    list_intents_receivers_filled[i] = 1
 
-            complete_row = [apk_dict["Pre_static_analysis"]["Filename"]] + [label] + list_permissions_filled + list_opcodes_filled + list_apicalls_filled + \
+            flowdroid_fields_matrix_filled = [0 for x in range(len(flowdroid_fields_matrix))]
+            flow_df = pd.read_csv(join_dir(flowdroid_folder, hash_app + ".csv"))
+            flow_df = flow_df.set_index("Sources\Sinks")
+            for i, item in enumerate(flowdroid_fields_matrix):
+                source, sink = item[0], item[1]
+                flowdroid_fields_matrix_filled[i] = flow_df[source][sink]
+            complete_row = [label] + list_permissions_filled + list_opcodes_filled + list_apicalls_filled + \
                         list_systemcommands_filled + list_intents_activities_filled + \
-                        list_intents_services_filled + list_intents_receivers_filled + list_api_packages_filled
+                        list_intents_services_filled + list_intents_receivers_filled + list_api_packages_filled + \
+                        flowdroid_fields_matrix_filled
 
             rows_permissions.append(list_permissions_filled)
             rows_opcodes.append(list_opcodes_filled)
@@ -615,9 +624,11 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         list_intents_receivers = ["RECEIVER-" + x for x in list(list_intents_receivers)]
         list_api_packages = ["APIPACKAGE-" + x for x in list(list_api_packages)]
 
-        complete_list_fields = ["File_name"] + ["label"] + list_permissions + list_opcodes + list_apicalls + \
+        flowdroid_fields_matrix_strings = ["FLOWDROID-" + x[0] + "-" + x[1] for x in flowdroid_fields_matrix]
+
+        complete_list_fields = ["label"] + list_permissions + list_opcodes + list_apicalls + \
                        list_systemcommands + list_intents_activities + list_intents_services + list_intents_receivers + \
-                       list_api_packages
+                       list_api_packages + flowdroid_fields_matrix_strings
 
         with open(output_folder + "/" +  export_csv, 'wb') as csv_file:
 
