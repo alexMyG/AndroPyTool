@@ -1,5 +1,6 @@
 # Alpine Linux with python 2.7 and Oracle Java 8
-FROM ubuntu:artful
+FROM ubuntu:bionic
+ENV DEBIAN_FRONTEND=noninteractive 
 
 # Installing Oracle JDK 8
 RUN apt-get update \
@@ -18,13 +19,9 @@ RUN apt-get update \
 		gcc \
  		python-tk \
  		curl \
- #&& add-apt-repository ppa:webupd8team/java -y \
- #&& apt-get update \
- #&& echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
- #&& apt-get install -y oracle-java8-installer \
  && echo "y" | apt-get install openjdk-8-jdk \
  && echo "y" | apt-get install openjdk-8-jre \
- && apt-get install -y python-setuptools \
+ && apt-get install -y python-setuptools unzip \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -46,23 +43,11 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERM=linux \
 	TERMINFO=/etc/terminfo
 
-RUN pwd
-
-RUN pwd
-
-RUN pwd
-
-RUN pwd
-
-RUN pwd
-
-
 RUN pwd \
  && cd /root/ \
  && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
- && wget https://github.com/pjlantz/droidbox/releases/download/v4.1.1/DroidBox411RC.tar.gz \
- && tar -zxvf DroidBox411RC.tar.gz \ 
- && cp -r DroidBox_4.1.1/images AndroPyTool/DroidBox_AndroPyTool/images \
+ && wget https://github.com/alexMyG/AndroPyTool/releases/download/droidbox_images_patched/images_droidbox.zip \
+ && unzip -o images_droidbox.zip -d AndroPyTool/DroidBox_AndroPyTool/images \
  && pip install wheel \
  && pip install -r AndroPyTool/requirements.txt \
  && touch AndroPyTool/avclass/__init__.py \

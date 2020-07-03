@@ -1,5 +1,7 @@
 # AndroPyTool
 
+## **Update! DroidBox images were fixed. Dynamic analysis is working now.**
+
 This is a tool for extracting static and dynamic features from Android APKs. It combines different well-known Android apps analysis tools such as DroidBox, FlowDroid, Strace, AndroGuard or VirusTotal analysis. Provided a source directory containing APK files, AndroPyTool applies all these tools to perform pre-static, static and dynamic analysis and generates files of features in JSON and CSV formats and also allows to save all the data in a MongoDB database.
 
 To obtain more information you can read the following two papers:
@@ -110,9 +112,8 @@ The next steps will allow you to install Android SDK in Non-GUI mode:
 - Now we can download the AndroPyTool repository from GitHub. It has some dependencies which will be also downloaded. In the case of DroidBox, the last release of the original DroidBox repository is also downloaded in order to copy the system and RAM images:
    ```sh
     $ git clone --recursive https://github.com/alexMyG/AndroPyTool.git
-    $ wget https://github.com/pjlantz/droidbox/releases/download/v4.1.1/DroidBox411RC.tar.gz
-    $ tar -zxvf DroidBox411RC.tar.gz
-    $ cp -r DroidBox_4.1.1/images AndroPyTool/DroidBox_AndroPyTool/images
+    $ wget https://github.com/alexMyG/AndroPyTool/releases/download/droidbox_images_patched/images_droidbox.zip
+    $ unzip -o images_droidbox.zip -d AndroPyTool/DroidBox_AndroPyTool/images
     $ touch AndroPyTool/avclass/__init__.py
     ```
 
