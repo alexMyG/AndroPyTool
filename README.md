@@ -170,3 +170,6 @@ The next steps will allow you to install Android SDK in Non-GUI mode:
     /Dynamic/Droidbox/     --> Droidbox analysis in JSON
     /Dynamic/Strace/       --> Strace analysis in CSV
     /Features_files/       --> Features files generated with AndroPyTool
+
+# Acknowledgements
+* [phamhduy](https://github.com/phamhduy) fixed the Droidbox images.
