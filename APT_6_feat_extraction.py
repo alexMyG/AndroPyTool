@@ -277,7 +277,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                     API_packages_dict[package_chosen] += list_smali_api_calls[api_call]
 
         static_analysis_dict['API packages'] = API_packages_dict
-        
+
 
         # System commands
         list_system_commands = read_system_commands(list_smali_strings, API_SYSTEM_COMMANDS)
@@ -294,7 +294,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         intents_activities = collections.OrderedDict()
         for activity in list_activities:
 
-            
+
             intents_activities[activity] = check_for_intents(join_dir(analyze_apk.replace('.apk', ''),
                                                                       'AndroidManifest.xml'),
                                                              activity, 'activity')
@@ -364,7 +364,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
                 # Setting column names with the first column
                 data_flowdroid_csv.index = data_flowdroid_csv["Sources\\Sinks"]
-                if "Sources\\Sinks" in data_flowdroid_csv.columns:        
+                if "Sources\\Sinks" in data_flowdroid_csv.columns:
                     del data_flowdroid_csv["Sources\\Sinks"]
 
                 flowdroid_field = data_flowdroid_csv.to_dict()
@@ -387,7 +387,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             else:
                 virus_total_dict = ""
 
-        
+
 
         ############################################################
         # GETTING AVCLASS LABEL IF VIRUSTOTAL ANALYSIS IS AVAILABLE
@@ -455,6 +455,10 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
                 database[apk_key]["Static_analysis"]["API packages"][package.replace(".", "-")] = \
                     database[apk_key]["Static_analysis"]["API packages"][package]
                 del database[apk_key]["Static_analysis"]["API packages"][package]
+            for package in database[apk_key]["Static_analysis"]["Services"].keys():
+                database[apk_key]["Static_analysis"]["Services"][package.replace(".", "-")] = \
+                    database[apk_key]["Static_analysis"]["Services"][package]
+                del database[apk_key]["Static_analysis"]["Services"][package]
 
         client = MongoClient('mongodb://' + export_mongodb)
         # Creating database
@@ -479,7 +483,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
 
         for apk_key in tqdm(database.keys()):
             apk_dict = database[apk_key]
-            
+
             if len(apk_key.split("/")) > 1:
                 kind = apk_key.split("/")[0]
                 hash_app = apk_key.split("/")[1]
@@ -491,7 +495,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             set_opcodes.update(apk_dict["Static_analysis"]["Opcodes"])
             set_apicalls.update(apk_dict["Static_analysis"]["API calls"])
             set_systemcommands.update(apk_dict["Static_analysis"]["System commands"])
-            
+
             for activity in apk_dict["Static_analysis"]["Activities"]:
                 if apk_dict["Static_analysis"]["Activities"][activity] is not None and \
                     len(apk_dict["Static_analysis"]["Activities"][activity]) > 0:
@@ -522,7 +526,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             list_apicalls[i] = ".".join(apicall.encode('ascii', 'ignore').split(".")[:-1])
 
         list_apicalls = list(set(list_apicalls))
-        
+
 
         flowdroid_fields = []
         if flowdroid_folder:
@@ -530,7 +534,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             flowdroid_fields = apk_dict_example["Static_analysis"]["FlowDroid"].keys()
             if "Sources\\Sinks" in flowdroid_fields:
                 del flowdroid_fields[flowdroid_fields.index("Sources\\Sinks")]
-        
+
         flowdroid_fields_matrix = [(x, y) for x in flowdroid_fields for y in flowdroid_fields]
 
         list_rows = []
@@ -543,7 +547,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
         rows_intents_services = []
         rows_intents_receivers = []
         rows_api_packages = []
-                
+
         for apk_key in tqdm(database.keys()):
             apk_dict = database[apk_key]
             label = None
@@ -553,7 +557,7 @@ def features_extractor(apks_directory, single_analysis, dynamic_analysis_folder,
             else:
                 label = ""
                 hash_app = apk_key
-            
+
             list_permissions_filled = [0 for x in range(len(list_permissions))]
             for i, item in enumerate(list_permissions):
                 if item.replace(" ", "") in apk_dict["Static_analysis"]["Permissions"]:

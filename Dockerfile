@@ -1,6 +1,6 @@
 # Alpine Linux with python 2.7 and Oracle Java 8
 FROM ubuntu:bionic
-ENV DEBIAN_FRONTEND=noninteractive 
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Installing Oracle JDK 8
 RUN apt-get update \
@@ -45,7 +45,7 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 
 RUN pwd \
  && cd /root/ \
- && git clone --recursive https://github.com/alexMyG/AndroPyTool.git \
+ && git clone --recursive --single-branch --branch restApi https://github.com/alexMyG/AndroPyTool.git \
  && wget https://github.com/alexMyG/AndroPyTool/releases/download/droidbox_images_patched/images_droidbox.zip \
  && unzip -o images_droidbox.zip -d AndroPyTool/DroidBox_AndroPyTool/images \
  && pip install wheel \
@@ -70,9 +70,3 @@ WORKDIR /root/AndroPyTool/
 
 ENTRYPOINT ["python", "-u", "/root/AndroPyTool/androPyTool.py"]
 #CMD cd
-
-
-
-
-
-
