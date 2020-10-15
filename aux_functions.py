@@ -67,4 +67,5 @@ def load_from_json(name):
 def get_sha256(apk):
     hasher_sha256 = hashlib.sha256()
     hasher_sha256.update(apk.read())
+    apk.stream.seek(0)
     return hasher_sha256.hexdigest()
