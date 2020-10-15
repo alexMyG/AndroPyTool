@@ -7,6 +7,11 @@ droidbox_env/
 *.csv
 OUTPUT*.json
 OUTPUT*.TXT
+
+#RestApi
+restApi/files/
+restApi/virus_total_api_key
+
 # Created by https://www.gitignore.io/api/python,pycharm
 
 ### PyCharm ###
