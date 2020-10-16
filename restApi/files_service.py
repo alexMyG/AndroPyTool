@@ -4,8 +4,8 @@ from flask import jsonify
 
 import files_repository
 import reports_repository
-from androPyTool import execute_andro_py_tool_steps
-from aux_functions import get_sha256
+from ../androPyTool import execute_andro_py_tool_steps
+from ../aux_functions import get_sha256
 
 
 def upload_apk(uploaded_file, virus_total_api_key):

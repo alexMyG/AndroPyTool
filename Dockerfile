@@ -45,7 +45,7 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 
 RUN pwd \
  && cd /root/ \
- && git clone --recursive --branch restApi https://github.com/alexMyG/AndroPyTool.git \
+ && git clone --recursive --single-branch --branch restApi https://github.com/alexMyG/AndroPyTool.git \
  && wget https://github.com/alexMyG/AndroPyTool/releases/download/droidbox_images_patched/images_droidbox.zip \
  && unzip -o images_droidbox.zip -d AndroPyTool/DroidBox_AndroPyTool/images \
  && pip install wheel \
