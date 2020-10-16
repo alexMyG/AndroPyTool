@@ -9,7 +9,7 @@ def get_all_reports():
 
 
 def app_has_report(sha256):
-    source_folder = os.path.join("restApi", "files", sha256)
+    source_folder = os.path.join("/apks", sha256)
 
     return os.path.exists(source_folder)
 
@@ -77,12 +77,12 @@ def get_complete_analysis(sha256):
 
 def read_analysis_json(sha256):
     try:
-        source_folder = os.path.join("restApi", "files", sha256, "Features_files")
+        source_folder = os.path.join("/apks", sha256, "Features_files")
         analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
         with open(os.path.join(source_folder, analysis_file)) as f:
             return json.load(f)
     except:
-        invalid_folder = os.path.join("restApi", "files", sha256, "invalid_apks")
+        invalid_folder = os.path.join("/apks", sha256, "invalid_apks")
         if os.path.exists(invalid_folder) and len(os.listdir(invalid_folder)) > 0:
             throw_error("Apk is invalid", 200)
         else:
@@ -105,7 +105,7 @@ def remove_fd(static_analysis):
 
 
 def update_report(sha256):
-    source_folder = os.path.join("restApi", "files", sha256, "Features_files")
+    source_folder = os.path.join("/apks", sha256, "Features_files")
     analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
     with open(os.path.join(source_folder, analysis_file), 'rw') as f:
         json_analysis = json.load(f)

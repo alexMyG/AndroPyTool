@@ -51,7 +51,8 @@ RUN pwd \
  && pip install wheel \
  && pip install -r AndroPyTool/requirements.txt \
  && touch AndroPyTool/avclass/__init__.py \
- && chmod 744 /root/AndroPyTool/run_androPyTool.sh
+ && chmod 744 /root/AndroPyTool/run_androPyTool.sh \
+ && echo "v0.02"
 
 
 # Preparing droidbox

@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 
 def save_apk(sha256, uploaded_file):
     filename = secure_filename(uploaded_file.filename)
-    source_folder = os.path.join("restApi", "files", sha256)
+    source_folder = os.path.join("/apks", sha256)
 
     if not os.path.exists(source_folder):
         os.makedirs(source_folder)
