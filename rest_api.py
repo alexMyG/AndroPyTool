@@ -10,4 +10,4 @@ main_app.register_blueprint(app_files)
 
 # If we're running in stand alone mode, run the application
 if __name__ == '__main__':
-    main_app.run(port=5000)
+    main_app.run(port=5000, debug=True, host='0.0.0.0')
