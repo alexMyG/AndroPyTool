@@ -1,7 +1,7 @@
 from flask import Flask
 
-from reports_controller import app_reports
-from files_controller import app_files
+from restApi.reports_controller import app_reports
+from restApi.files_controller import app_files
 
 main_app = Flask(__name__)
 main_app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024  # 32MB
