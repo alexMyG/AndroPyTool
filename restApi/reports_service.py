@@ -1,5 +1,5 @@
 import reports_repository
-from ../aux_functions import throw_error
+from aux_functions import throw_error
 
 
 def get_all_reports():

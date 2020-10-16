@@ -2,7 +2,7 @@ from flask import request, abort, Blueprint
 
 import files_service
 
-from ../aux_functions import throw_error
+from aux_functions import throw_error
 
 app_files = Blueprint('app_files', __name__)
 
