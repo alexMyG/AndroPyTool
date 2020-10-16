@@ -2,6 +2,8 @@ from flask import request, abort, Blueprint
 
 import files_service
 
+from aux_functions import throw_error
+
 app_files = Blueprint('app_files', __name__)
 
 
@@ -14,16 +16,16 @@ def upload_file():
 
 def check_file():
     if 'file' not in request.files:
-        abort(400, 'No file part')
+        throw_error("No file part", 400)
     if len(request.files.getlist('file')) > 1:
-        abort(400, 'Only one file upload is allowed')
+        throw_error("Only one file upload is allowed", 400)
 
     uploaded_file = request.files['file']
 
     if uploaded_file.filename == '':
-        abort(400, 'No selected file')
+        throw_error("No selected file", 400)
     if not is_allowed_extension(uploaded_file.filename):
-        abort(400, 'Only .apk extension is allowed')
+        throw_error("Only .apk extension is allowed", 400)
 
 
 def is_allowed_extension(filename):

@@ -31,7 +31,7 @@ def get_dynamic_analysis_strace(sha256):
     return reports_service.get_dynamic_analysis_strace(escape(sha256))
 
 
-@app_reports.route('/reports/<sha256>/virusTotal', methods=['GET'])
+@app_reports.route('/reports/<sha256>/virustotal', methods=['GET'])
 def get_virusTotal_analysis(sha256):
     return reports_service.get_virusTotal_analysis(escape(sha256))
 
@@ -41,12 +41,12 @@ def get_static_analysis(sha256):
     return reports_service.get_static_analysis(escape(sha256))
 
 
-@app_reports.route('/reports/<sha256>/static/androPyTool', methods=['GET'])
+@app_reports.route('/reports/<sha256>/static/andropytool', methods=['GET'])
 def get_static_analysis_androPyTool(sha256):
     return reports_service.get_static_analysis_androPyTool(escape(sha256))
 
 
-@app_reports.route('/reports/<sha256>/static/flowDroid', methods=['GET'])
+@app_reports.route('/reports/<sha256>/static/flowdroid', methods=['GET'])
 def get_static_analysis_flowDroid(sha256):
     return reports_service.get_static_analysis_flowDroid(escape(sha256))
 

@@ -5,6 +5,9 @@ import json
 import fnmatch
 import subprocess
 
+from flask import make_response, jsonify
+from werkzeug.exceptions import abort
+
 
 def list_files(directory, string):
     result = []
@@ -18,7 +21,7 @@ def unzip_apk(analyze_apk):
     # directory = source_directory + os.path.basename(filename).replace('.apk', '')
     directory = analyze_apk.replace('.apk', '/')
     if not os.path.exists(directory):
-    
+
         command = "java -jar Libraries/apktool.jar d " + analyze_apk + " -o " + directory + " -f"
 
         p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -69,3 +72,7 @@ def get_sha256(apk):
     hasher_sha256.update(apk.read())
     apk.stream.seek(0)
     return hasher_sha256.hexdigest()
+
+
+def throw_error(error_message, error_code):
+    abort(make_response(jsonify(error=error_message), error_code))
