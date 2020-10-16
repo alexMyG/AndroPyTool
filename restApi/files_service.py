@@ -18,9 +18,9 @@ def upload_apk(uploaded_file, virus_total_api_key):
 
         execute_andro_py(source_folder, virus_total_api_key)
 
-        #reports_repository.update_report(sha256)
+        reports_repository.update_report(sha256)
 
-        return jsonify({'resource_url': 'files/'+sha256}), 202
+        return jsonify({'resource_url': 'files/' + sha256}), 202
 
 
 def execute_andro_py(source_folder, virus_total_api_key):
@@ -45,8 +45,3 @@ def execute_andro_py(source_folder, virus_total_api_key):
                                 droidbox_time=300,
                                 virus_total_api_key=virus_total_api_key
                                 )
-
-
-def make_changes():
-
-    return
