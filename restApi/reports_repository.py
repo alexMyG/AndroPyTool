@@ -102,3 +102,14 @@ def remove_vt(analysis):
 
 def remove_fd(static_analysis):
     static_analysis.pop("FlowDroid")
+
+
+def update_report(sha256):
+    source_folder = os.path.join("restApi", "files", sha256, "Features_files")
+    analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
+    with open(os.path.join(source_folder, analysis_file), 'rw') as f:
+        json_analysis = json.load(f)
+        if "Droidbox" in json_analysis["Dynamic_analysis"]:
+            json_analysis["Dynamic_analysis"]["Droidbox"]["apkName"] = json_analysis["Pre_static_analysis"]["Filename"]
+        if "Strace" in json_analysis["Dynamic_analysis"]:
+            json_analysis["Dynamic_analysis"]["Strace"] = "Strace URI" #TODO

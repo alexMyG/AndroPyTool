@@ -68,5 +68,5 @@ EXPOSE 5554 5555
 
 WORKDIR /root/AndroPyTool/
 
-ENTRYPOINT ["python", "-u", "/root/AndroPyTool/androPyTool.py"]
+ENTRYPOINT ["python", "-u", "/root/AndroPyTool/restApi/main.py"]
 #CMD cd

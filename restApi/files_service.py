@@ -1,5 +1,7 @@
 import os
 
+from flask import jsonify
+
 import files_repository
 import reports_repository
 from androPyTool import execute_andro_py_tool_steps
@@ -16,9 +18,9 @@ def upload_apk(uploaded_file, virus_total_api_key):
 
         execute_andro_py(source_folder, virus_total_api_key)
 
-        make_changes()
+        #reports_repository.update_report(sha256)
 
-        return "scan_apk()"
+        return jsonify({'resource_url': 'files/'+sha256}), 202
 
 
 def execute_andro_py(source_folder, virus_total_api_key):
@@ -46,4 +48,5 @@ def execute_andro_py(source_folder, virus_total_api_key):
 
 
 def make_changes():
+
     return
