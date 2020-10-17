@@ -36,7 +36,8 @@ def get_dynamic_analysis_droidbox(sha256):
 
 
 def get_dynamic_analysis_strace(sha256):
-    return os.listdir(os.path.join("/apks", sha256, "Dynamic", "Strace"))[0]
+    strace_folder = os.path.join("/apks", sha256, "Dynamic", "Strace")
+    return os.path.join(strace_folder, os.listdir(strace_folder)[0])
 
 
 def get_virusTotal_analysis(sha256):
@@ -69,7 +70,7 @@ def get_complete_analysis(sha256):
     analysis_json = read_analysis_json(sha256)
 
     remove_pre_static_vt(analysis_json["Pre_static_analysis"])
-    remove_vt(analysis_json)
+    remove_vt(analysis_json["VirusTotal"])
 
     return analysis_json
 
@@ -95,10 +96,10 @@ def remove_pre_static_vt(pre_static_analysis):
         pre_static_analysis.pop(key)
 
 
-def remove_vt(analysis):
-    for key in analysis["VirusTotal"]:
-        if key != "permalink":
-            analysis["VirusTotal"].pop(key)
+def remove_vt(analysis_vt):
+    permalink = analysis_vt["permalink"]
+    analysis_vt.clear()
+    analysis_vt["permalink"] = permalink
 
 
 def remove_fd(static_analysis):
