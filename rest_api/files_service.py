@@ -25,7 +25,7 @@ def upload_apk(uploaded_file, virus_total_api_key):
 
 def execute_andro_py(source_folder, virus_total_api_key):
     if virus_total_api_key is None:
-        with open(os.path.join("restApi", 'virus_total_api_key')) as f:
+        with open(os.path.join("rest_api", 'virus_total_api_key')) as f:
             virus_total_api_key = f.read()
 
     execute_andro_py_tool_steps(source_folder=source_folder,

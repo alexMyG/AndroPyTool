@@ -8,10 +8,10 @@ droidbox_env/
 OUTPUT*.json
 OUTPUT*.TXT
 
-#RestApi
-restApi/files/*
-!restApi/files/test_corrupted
-restApi/virus_total_api_key
+# Rest api
+rest_api/files/*
+!rest_api/files/test_corrupted
+rest_api/virus_total_api_key
 
 # Created by https://www.gitignore.io/api/python,pycharm
 
