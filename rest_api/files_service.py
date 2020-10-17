@@ -42,6 +42,6 @@ def execute_andro_py(source_folder, virus_total_api_key):
                                 exportCSV=None,
                                 with_color=True,
                                 vt_threshold=1,
-                                droidbox_time=300,
+                                droidbox_time=10,
                                 virus_total_api_key=virus_total_api_key
                                 )

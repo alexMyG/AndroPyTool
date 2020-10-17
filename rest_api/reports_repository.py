@@ -120,7 +120,7 @@ def update_report(sha256):
         all_reports = json.load(f)
 
     remove_pre_static_vt(json_analysis["Pre_static_analysis"])
-    all_reports.append(json_analysis["Pre_static_analysis"])
+    all_reports["all_reports"].append(json_analysis["Pre_static_analysis"])
 
     with open(os.path.join("/apks", "all_reports.json"), 'w') as f:
         json.dump(all_reports, f)

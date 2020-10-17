@@ -1,4 +1,5 @@
 import os
+import sys
 
 from flask import Flask
 
@@ -12,8 +13,12 @@ main_app.register_blueprint(app_files)
 
 # If we're running in stand alone mode, run the application
 if __name__ == '__main__':
+    if not os.path.exists(os.path.join("rest_api", 'virus_total_api_key')):
+        print "You have to add a default virusTotal API key on file 'rest_api/virus_total_api_key'"
+        sys.exit(1)
+
     if not os.path.exists(os.path.join("/apks", "all_reports.json")):
         with open(os.path.join("/apks", "all_reports.json"), 'w') as f:
-            f.write('[]')
+            f.write('{"all_reports":[]}')
 
     main_app.run(port=5000, host='0.0.0.0', threaded=False)
