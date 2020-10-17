@@ -35,9 +35,7 @@ def get_dynamic_analysis_droidbox(sha256):
 
 
 def get_dynamic_analysis_strace(sha256):
-    analysis_json = read_analysis_json(sha256)
-
-    return analysis_json["Dynamic_analysis"]["Strace"]
+    return os.path.join("apks", sha256, "Dynamic", "Strace", sha256 + ".csv")
 
 
 def get_virusTotal_analysis(sha256):
@@ -107,9 +105,12 @@ def remove_fd(static_analysis):
 def update_report(sha256):
     source_folder = os.path.join("/apks", sha256, "Features_files")
     analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
-    with open(os.path.join(source_folder, analysis_file), 'rw') as f:
+    with open(os.path.join(source_folder, analysis_file)) as f:
         json_analysis = json.load(f)
         if "Droidbox" in json_analysis["Dynamic_analysis"]:
             json_analysis["Dynamic_analysis"]["Droidbox"]["apkName"] = json_analysis["Pre_static_analysis"]["Filename"]
         if "Strace" in json_analysis["Dynamic_analysis"]:
-            json_analysis["Dynamic_analysis"]["Strace"] = "Strace URI" #TODO
+            json_analysis["Dynamic_analysis"]["Strace"] = "reports/" + sha256 + "/dynamic/strace"
+
+    with open(os.path.join(source_folder, analysis_file), 'w') as f:
+        json.dump(json_analysis, f)

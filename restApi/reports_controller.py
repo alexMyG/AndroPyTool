@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, send_file
 from markupsafe import escape
 
 import reports_service
@@ -28,7 +28,11 @@ def get_dynamic_analysis_droidbox(sha256):
 
 @app_reports.route('/reports/<sha256>/dynamic/strace', methods=['GET'])
 def get_dynamic_analysis_strace(sha256):
-    return reports_service.get_dynamic_analysis_strace(escape(sha256))
+    return send_file(
+        reports_service.get_dynamic_analysis_strace(escape(sha256)),
+        mimetype="text/csv",
+        attachment_filename="strace_" + sha256 + ".csv"
+    )
 
 
 @app_reports.route('/reports/<sha256>/virustotal', methods=['GET'])

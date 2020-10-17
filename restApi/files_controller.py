@@ -1,7 +1,6 @@
-from flask import request, abort, Blueprint
+from flask import request, Blueprint
 
 import files_service
-
 from aux_functions import throw_error
 
 app_files = Blueprint('app_files', __name__)
