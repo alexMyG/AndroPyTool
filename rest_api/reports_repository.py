@@ -5,7 +5,8 @@ from aux_functions import throw_error
 
 
 def get_all_reports():
-    return "{'report': all :)}"
+    with open(os.path.join("/apks", "all_reports.json")) as f:
+        return json.load(f)
 
 
 def app_has_report(sha256):
@@ -114,3 +115,12 @@ def update_report(sha256):
 
     with open(os.path.join(source_folder, analysis_file), 'w') as f:
         json.dump(json_analysis, f)
+
+    with open(os.path.join("/apks", "all_reports.json")) as f:
+        all_reports = json.load(f)
+
+    remove_pre_static_vt(json_analysis["Pre_static_analysis"])
+    all_reports.append(json_analysis["Pre_static_analysis"])
+
+    with open(os.path.join("/apks", "all_reports.json"), 'w') as f:
+        json.dump(all_reports, f)
