@@ -69,5 +69,7 @@ EXPOSE 5554 5555
 
 WORKDIR /root/AndroPyTool/
 
+COPY rest_api/virus_total_api_key rest_api/virus_total_api_key
+
 ENTRYPOINT ["python", "-u", "/root/AndroPyTool/rest_api.py"]
 #CMD cd
