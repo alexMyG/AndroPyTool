@@ -12,15 +12,15 @@ def upload_apk(uploaded_file, virus_total_api_key):
     sha256 = get_sha256(uploaded_file)
 
     if reports_repository.app_has_report(sha256):
-        return jsonify({'resource_uri': 'reports/' + sha256}), 202
+        return jsonify({'resource_uri': 'reports/' + sha256}), 200
     else:
-        source_folder, has_name_changed = files_repository.save_apk(sha256, uploaded_file)
+        source_folder = files_repository.save_apk(sha256, uploaded_file)
 
         execute_andro_py(source_folder, virus_total_api_key)
 
-        reports_repository.update_report(sha256)
+        reports_repository.save_report_to_db(sha256)
 
-        return jsonify({'resource_uri': 'files/' + sha256}), 202
+        return jsonify({'resource_uri': 'reports/' + sha256}), 202
 
 
 def execute_andro_py(source_folder, virus_total_api_key):
@@ -40,7 +40,7 @@ def execute_andro_py(source_folder, virus_total_api_key):
                                 system_commands_index='info/system_commands.txt',
                                 export_mongodb=None,
                                 exportCSV=None,
-                                with_color=True,
+                                with_color=False,
                                 vt_threshold=1,
                                 droidbox_time=10,
                                 virus_total_api_key=virus_total_api_key

@@ -12,6 +12,4 @@ def save_apk(sha256, uploaded_file):
 
     uploaded_file.save(os.path.join(source_folder, filename))
 
-    has_name_changed = (filename == uploaded_file.filename)
-
-    return source_folder, has_name_changed
+    return source_folder

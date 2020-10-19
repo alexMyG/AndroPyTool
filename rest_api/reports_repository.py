@@ -106,7 +106,7 @@ def remove_fd(static_analysis):
     static_analysis.pop("FlowDroid")
 
 
-def update_report(sha256):
+def save_report_to_db(sha256):
     source_folder = os.path.join("/apks", sha256, "Features_files")
     analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
     with open(os.path.join(source_folder, analysis_file)) as f:
@@ -123,6 +123,7 @@ def update_report(sha256):
         all_reports = json.load(f)
 
     remove_pre_static_vt(json_analysis["Pre_static_analysis"])
+    json_analysis["Pre_static_analysis"]["resource_uri"] = "reports/" + sha256
     all_reports["all_reports"].append(json_analysis["Pre_static_analysis"])
 
     with open(os.path.join("/apks", "all_reports.json"), 'w') as f:

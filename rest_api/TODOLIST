@@ -3,3 +3,4 @@ No usar flask.run sino crear un servidor de producción
 Hacer asíncrono el análisis
 Devolver estado del análisis
 Proteger API de ataques
+Endpoint para descargar la apk
