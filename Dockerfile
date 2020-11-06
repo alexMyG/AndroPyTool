@@ -52,7 +52,7 @@ RUN pwd \
  && pip install -r AndroPyTool/requirements.txt \
  && touch AndroPyTool/avclass/__init__.py \
  && chmod 744 /root/AndroPyTool/run_androPyTool.sh \
- && echo "v0.03"
+ && echo "v0.04"
 
 
 # Preparing droidbox
@@ -71,4 +71,4 @@ WORKDIR /root/AndroPyTool/
 
 COPY rest_api/virus_total_api_key rest_api/virus_total_api_key
 
-ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:5000", "root.AndroPyTool.rest_api:main_app"]
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:5000", "-w", "20", "--timeout", "600", "rest_api_app:main_app"]

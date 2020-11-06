@@ -107,24 +107,42 @@ def remove_fd(static_analysis):
 
 
 def save_report_to_db(sha256):
-    source_folder = os.path.join("/apks", sha256, "Features_files")
-    analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
-    with open(os.path.join(source_folder, analysis_file)) as f:
-        json_analysis = json.load(f)
-        if "Droidbox" in json_analysis["Dynamic_analysis"]:
-            json_analysis["Dynamic_analysis"]["Droidbox"]["apkName"] = json_analysis["Pre_static_analysis"]["Filename"]
-        if "Strace" in json_analysis["Dynamic_analysis"]:
-            json_analysis["Dynamic_analysis"]["Strace"] = "reports/" + sha256 + "/dynamic/strace"
+    try:
+        source_folder = os.path.join("/apks", sha256, "Features_files")
+        analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
+        with open(os.path.join(source_folder, analysis_file)) as f:
+            json_analysis = json.load(f)
+            if "Droidbox" in json_analysis["Dynamic_analysis"]:
+                json_analysis["Dynamic_analysis"]["Droidbox"]["apkName"] = json_analysis["Pre_static_analysis"]["Filename"]
+            if "Strace" in json_analysis["Dynamic_analysis"]:
+                json_analysis["Dynamic_analysis"]["Strace"] = "reports/" + sha256 + "/dynamic/strace"
 
-    with open(os.path.join(source_folder, analysis_file), 'w') as f:
-        json.dump(json_analysis, f)
+        with open(os.path.join(source_folder, analysis_file), 'w') as f:
+            json.dump(json_analysis, f)
 
-    with open(os.path.join("/apks", "all_reports.json")) as f:
-        all_reports = json.load(f)
+        with open(os.path.join("/apks", "all_reports.json")) as f:
+            all_reports = json.load(f)
 
-    remove_pre_static_vt(json_analysis["Pre_static_analysis"])
-    json_analysis["Pre_static_analysis"]["resource_uri"] = "reports/" + sha256
-    all_reports["all_reports"].append(json_analysis["Pre_static_analysis"])
+        remove_pre_static_vt(json_analysis["Pre_static_analysis"])
+        json_analysis["Pre_static_analysis"]["resource_uri"] = "reports/" + sha256
+        all_reports["all_reports"].append(json_analysis["Pre_static_analysis"])
 
-    with open(os.path.join("/apks", "all_reports.json"), 'w') as f:
-        json.dump(all_reports, f)
+        with open(os.path.join("/apks", "all_reports.json"), 'w') as f:
+            json.dump(all_reports, f)
+    except:
+        with open(os.path.join("/apks", "all_reports.json")) as f:
+            all_reports = json.load(f)
+
+        filename = os.listdir(os.path.join("/apks", sha256, "invalid_apk")[0])
+
+        invalid_report = """{
+            "Filename": "%s",
+            "resource_uri": "reports/%s",
+            "sha256": "%s"
+        }
+        """ % (filename, sha256, sha256)
+
+        all_reports["all_reports"].append(json.dumps(invalid_report))
+
+        with open(os.path.join("/apks", "all_reports.json"), 'w') as f:
+            json.dump(all_reports, f)
