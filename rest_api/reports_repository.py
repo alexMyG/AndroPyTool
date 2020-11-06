@@ -141,7 +141,7 @@ def save_report_to_db(sha256):
             "sha256": sha256
         }
 
-        all_reports["all_reports"].append(json.dumps(invalid_report))
+        all_reports["all_reports"].append(invalid_report)
 
         with open(os.path.join("/apks", "all_reports.json"), 'w') as f:
             json.dump(all_reports, f)
