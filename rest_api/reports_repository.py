@@ -133,7 +133,7 @@ def save_report_to_db(sha256):
         with open(os.path.join("/apks", "all_reports.json")) as f:
             all_reports = json.load(f)
 
-        filename = os.listdir(os.path.join("/apks", sha256, "invalid_apk"))[0]
+        filename = os.listdir(os.path.join("/apks", sha256, "invalid_apks"))[0]
 
         invalid_report = {
             "Filename": filename,
