@@ -71,5 +71,4 @@ WORKDIR /root/AndroPyTool/
 
 COPY rest_api/virus_total_api_key rest_api/virus_total_api_key
 
-ENTRYPOINT ["python", "-u", "/root/AndroPyTool/rest_api.py"]
-#CMD cd
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:5000", "root.AndroPyTool.rest_api:main_app"]

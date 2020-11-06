@@ -86,7 +86,7 @@ def read_analysis_json(sha256):
         if os.path.exists(invalid_folder) and len(os.listdir(invalid_folder)) > 0:
             throw_error("Apk is invalid", 200)
         else:
-            throw_error("Report is corrupted", 500)
+            throw_error("Report is corrupted or being generated", 500)
 
 
 def remove_pre_static_vt(pre_static_analysis):
