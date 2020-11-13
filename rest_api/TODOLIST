@@ -1,8 +1,9 @@
-// Volver a poner db_time a 300
-// No usar flask.run sino crear un servidor de producción
+Error al procesar dos aplicaciones a la vez
+
+
 Hacer asíncrono el análisis
 Devolver estado del análisis
 Proteger API de ataques
+
 Endpoint para descargar la apk
 Paginar las peticiones de GET /reports
-// Error al uploadear una app invalid

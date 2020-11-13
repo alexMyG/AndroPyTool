@@ -43,16 +43,16 @@ ENV ANDROID_HOME="/root/android-sdk-linux" \
 	TERM=linux \
 	TERMINFO=/etc/terminfo
 
+COPY . /root/AndroPyTool
+
 RUN pwd \
  && cd /root/ \
- && git clone --recursive --single-branch --branch restApi https://github.com/alexMyG/AndroPyTool.git \
  && wget https://github.com/alexMyG/AndroPyTool/releases/download/droidbox_images_patched/images_droidbox.zip \
  && unzip -o images_droidbox.zip -d AndroPyTool/DroidBox_AndroPyTool/images \
  && pip install wheel \
  && pip install -r AndroPyTool/requirements.txt \
  && touch AndroPyTool/avclass/__init__.py \
- && chmod 744 /root/AndroPyTool/run_androPyTool.sh \
- && echo "v0.08"
+ && chmod 744 /root/AndroPyTool/run_androPyTool.sh
 
 
 # Preparing droidbox

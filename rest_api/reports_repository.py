@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 from aux_functions import throw_error
 
@@ -112,10 +113,11 @@ def save_report_to_db(sha256):
         analysis_file = [f for f in os.listdir(source_folder) if f.endswith("analysis.json")][0]
         with open(os.path.join(source_folder, analysis_file)) as f:
             json_analysis = json.load(f)
-            if "Droidbox" in json_analysis["Dynamic_analysis"]:
-                json_analysis["Dynamic_analysis"]["Droidbox"]["apkName"] = json_analysis["Pre_static_analysis"]["Filename"]
-            if "Strace" in json_analysis["Dynamic_analysis"]:
-                json_analysis["Dynamic_analysis"]["Strace"] = "reports/" + sha256 + "/dynamic/strace"
+
+            json_analysis["Dynamic_analysis"]["Droidbox"]["apkName"] = json_analysis["Static_analysis"]["Package name"]
+            json_analysis["Pre_static_analysis"]["Filename"] = json_analysis["Static_analysis"]["Package name"]
+            json_analysis["Dynamic_analysis"]["Strace"] = "reports/" + sha256 + "/dynamic/strace"
+            json_analysis["Pre_static_analysis"]["analysisDate"] = str(datetime.now())
 
         with open(os.path.join(source_folder, analysis_file), 'w') as f:
             json.dump(json_analysis, f)
