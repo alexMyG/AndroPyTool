@@ -5,7 +5,7 @@ certifi==2017.11.5
 chardet==3.0.4
 cycler==0.10.0
 idna==2.6
-lxml==4.1.1
+lxml==4.6.3
 matplotlib==2.1.1
 numpy==1.13.3
 pandas==0.22.0
