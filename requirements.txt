@@ -7,7 +7,7 @@ cycler==0.10.0
 idna==2.6
 lxml==4.1.1
 matplotlib==2.1.1
-numpy==1.13.3
+numpy==1.22.0
 pandas==0.22.0
 pymongo==3.6.0
 pyparsing==2.2.0
