@@ -1,7 +1,7 @@
 androguard==3.0.1
 backports.functools-lru-cache==1.4
 better-exceptions==0.1.8
-certifi==2017.11.5
+certifi==2022.12.7
 chardet==3.0.4
 cycler==0.10.0
 idna==2.6
